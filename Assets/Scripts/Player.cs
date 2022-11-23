@@ -5,81 +5,82 @@ using UnityEngine;
 public class Player : CharacterProperty
     
 {
-    float x;
-    float y;
-    float moveSpeed;
-    float inputMagnitude;
-    bool Walking = false;
-    bool isSprinting = false;
+    Vector2 desireDir = Vector2.zero;
+    Vector2 curDir = Vector2.zero;
+
+    public float moveSpeed = 1.0f;
+    public float inputMagnitude;
+    public bool isSprinting = false;
+    public float movementSmooth = 6f;
     public float walkSpeed = 2.0f;
     public float runningSpeed = 4.0f;
     public float sprintSpeed = 6.0f;
-
-    public PlayerAnimator playerAnimator;
-
+    
     // Start is called before the first frame update
     void Start()
     {
         
     }
-    private void FixedUpdate()
-    {
-        MoveSpeed();
-    }
-
     // Update is called once per frame
     void Update()
     {
-        InputHandle();
-        playerAnimator.UpdateAnimator();
+        desireDir.x = Input.GetAxis("Horizontal");
+        desireDir.y = Input.GetAxis("Vertical");
+
+        curDir.x = Mathf.Lerp(curDir.x, desireDir.x, Time.deltaTime * 10.0f);
+        curDir.y = Mathf.Lerp(curDir.y, desireDir.y, Time.deltaTime * 10.0f);
+
+        myAnim.SetFloat(AniParameters.InputVertical, curDir.x);
+        myAnim.SetFloat(AniParameters.InputMagnitude, curDir.y);
+        // MoveInput();
     }
 
-    void InputHandle()
+    private void OnAnimatorMove()
     {
-        MoveInput();
-        SprintInput();
+        MoveCharacter();
     }
 
-    void MoveSpeed()
-    {
-        if(!isSprinting)
-        {
-            if (Walking)
-            {
-                inputMagnitude = 0.5f;
-                moveSpeed = walkSpeed;
-            }
-            else
-            {
-                inputMagnitude = 1.0f;
-                moveSpeed = runningSpeed;
-            }
-        }
-        else
-        {
-            inputMagnitude = 1.5f;
-            moveSpeed = sprintSpeed;
-        }
-
-        myAnim.SetFloat("IsSprinting", inputMagnitude);
-    }
     void MoveInput()
     {
-        x = Input.GetAxis("Horizontal");
-        y = Input.GetAxis("Vertical");
+        desireDir.x = Input.GetAxis("Horizontal");
+        desireDir.y = Input.GetAxis("Vertical");
+
+        if (Input.GetKeyDown(KeyCode.LeftShift))
+        {
+            isSprinting = true;
+            inputMagnitude = 1.5f;
+            moveSpeed *= 2.0f;
+        }
+        else if (Input.GetKeyUp(KeyCode.LeftShift))
+        {
+            isSprinting = false;
+            inputMagnitude = desireDir.x;
+            moveSpeed *= 0.5f;
+        }
+
+        myAnim.SetFloat(AniParameters.InputVertical, curDir.y);
+        myAnim.SetFloat(AniParameters.InputHorizontal, curDir.x * moveSpeed);
+        myAnim.SetFloat(AniParameters.InputMagnitude, curDir.x * moveSpeed);
     }
 
-    void SprintInput()
+    void MoveCharacter()
     {
-        if(Input.GetKeyDown(KeyCode.LeftShift))
+        if(curDir == Vector2.zero)
         {
-            myAnim.SetBool("IsSprinting", true);
-            isSprinting = true;
+            transform.position = myAnim.rootPosition;
+            transform.rotation = myAnim.rootRotation;
         }
-        else if(Input.GetKeyUp(KeyCode.LeftShift))
-        {
-            myAnim.SetBool("IsSprinting", false);
-            isSprinting = false;
-        }
+        curDir.x = Mathf.Lerp(curDir.x, desireDir.x, 1.0f * Time.deltaTime);
+        curDir.y = Mathf.Lerp(curDir.y, desireDir.y, 1.0f * Time.deltaTime);
+    }
+
+    public static partial class AniParameters
+    {
+        public static int InputHorizontal = Animator.StringToHash("InputHorizontal");
+        public static int InputVertical = Animator.StringToHash("InputVertical");
+        public static int InputMagnitude = Animator.StringToHash("InputMagnitude");
+        public static int IsGrounded = Animator.StringToHash("IsGrounded");
+        public static int IsSprinting = Animator.StringToHash("IsSprinting");
+        public static int GroundDistance = Animator.StringToHash("GroundDistance");
     }
 }
