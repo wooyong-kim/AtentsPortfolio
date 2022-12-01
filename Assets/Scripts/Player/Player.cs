@@ -27,6 +27,8 @@ public class Player : CharacterProperty
     {
         Move();
         Attack();
+        Shield();
+        Roll();
     }
 
     void Move()
@@ -56,6 +58,34 @@ public class Player : CharacterProperty
             if (Input.GetMouseButtonDown(0))
             {
                 ClickCount++;
+            }
+        }
+    }
+
+    void Shield()
+    {
+        if(!myAnim.GetBool("IsAttacking"))
+        {
+            if(Input.GetMouseButton(1))
+            {
+                myAnim.SetBool("Shield", true);
+            }
+            else
+            {
+                myAnim.SetBool("Shield", false);
+            }
+        }
+    }
+
+    void Roll()
+    {
+        if (!myAnim.GetBool("IsAttacking"))
+        {
+            if(Input.GetKeyDown(KeyCode.Space))
+            {
+                Vector3 dir = new Vector3(desireDir.x, 0, desireDir.y);
+                myAnim.SetTrigger("Roll");
+                transform.localRotation = Quaternion.Lerp(transform.localRotation, dir, 1.0f);
             }
         }
     }

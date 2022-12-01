@@ -1,11 +1,11 @@
 fileFormatVersion: 2
-guid: edbf965414f517147b11ed9078b0d904
+guid: 0b511f1df0ac9cc479e27f45165573bd
 ModelImporter:
   serializedVersion: 21300
   internalIDToNameTable:
   - first:
       74: -203655887218126122
-    second: LeftRun
+    second: RightRun
   externalObjects: {}
   materials:
     materialImportMode: 2
@@ -36,11 +36,11 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: LeftRun
+      name: RightRun
       takeName: mixamo.com
       internalID: 0
       firstFrame: 0
-      lastFrame: 20
+      lastFrame: 21
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -125,7 +125,7 @@ ModelImporter:
     hasTranslationDoF: 0
     hasExtraRoot: 0
     skeletonHasParents: 1
-  lastHumanDescriptionAvatarSource: {fileID: 9000000, guid: c99afc5d3a336b6458a65acfe1ac0d0e, type: 3}
+  lastHumanDescriptionAvatarSource: {fileID: 9000000, guid: c55358403a29e1b48a82448ef4e12f6f, type: 3}
   autoGenerateAvatarMappingIfUnspecified: 1
   animationType: 2
   humanoidOversampling: 1
