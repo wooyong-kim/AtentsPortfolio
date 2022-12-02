@@ -9,7 +9,6 @@ public class Player : CharacterProperty
     public LayerMask EnemyMask = default;
     public Transform myHitPosition;
     public float moveSpeed = 10.0f;
-    bool IsAir = false;
     bool IsComboable = false;
     int ClickCount = 0;
     // Start is called before the first frame update
@@ -19,7 +18,7 @@ public class Player : CharacterProperty
     }
     private void FixedUpdate()
     {
-        if (!IsAir) myRigid.velocity = Vector3.zero;
+        myRigid.velocity = Vector3.zero;
     }
 
     // Update is called once per frame
@@ -28,6 +27,7 @@ public class Player : CharacterProperty
         Move();
         Attack();
         Shield();
+        Sit();
         Roll();
     }
 
@@ -45,7 +45,7 @@ public class Player : CharacterProperty
 
     void Attack()
     {
-        if(!myAnim.GetBool("IsAttacking"))
+        if(!myAnim.GetBool("IsAttacking") && !myAnim.GetBool("IsRoll"))
         {
             if (Input.GetMouseButtonDown(0))
             {
@@ -64,7 +64,7 @@ public class Player : CharacterProperty
 
     void Shield()
     {
-        if(!myAnim.GetBool("IsAttacking"))
+        if(!myAnim.GetBool("IsAttacking") && !myAnim.GetBool("IsRoll"))
         {
             if(Input.GetMouseButton(1))
             {
@@ -77,15 +77,28 @@ public class Player : CharacterProperty
         }
     }
 
+    void Sit()
+    {
+        if (!myAnim.GetBool("IsAttacking") && !myAnim.GetBool("IsRoll"))
+        {
+            if (Input.GetKeyDown(KeyCode.LeftControl))
+            {
+                if(!myAnim.GetBool("Sit"))
+                    myAnim.SetBool("Sit", true);
+                else
+                    myAnim.SetBool("Sit", false);
+            }
+        }
+    }
+
     void Roll()
     {
-        if (!myAnim.GetBool("IsAttacking"))
+        if (!myAnim.GetBool("IsAttacking") && !myAnim.GetBool("IsRoll"))
         {
             if(Input.GetKeyDown(KeyCode.Space))
             {
-                Vector3 dir = new Vector3(desireDir.x, 0, desireDir.y);
+                Vector3 dir = new Vector3(0 , desireDir.y, 0);
                 myAnim.SetTrigger("Roll");
-                transform.localRotation = Quaternion.Lerp(transform.localRotation, dir, 1.0f);
             }
         }
     }
@@ -125,22 +138,6 @@ public class Player : CharacterProperty
             {
                 myAnim.SetTrigger("ComboStop");
             }
-        }
-    }
-
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject.layer == LayerMask.NameToLayer("Ground"))
-        {
-            IsAir = false;
-        }
-    }
-
-    private void OnCollisionExit(Collision collision)
-    {
-        if (collision.gameObject.layer == LayerMask.NameToLayer("Ground"))
-        {
-            IsAir = true;
         }
     }
 }

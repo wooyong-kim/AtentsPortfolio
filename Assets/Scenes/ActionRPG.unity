@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657844, g: 0.49641222, b: 0.57481694, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -247,7 +247,7 @@ SphereCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 894272510}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.5
@@ -820,6 +820,20 @@ PrefabInstance:
       propertyPath: m_Controller
       value: 
       objectReference: {fileID: 9100000, guid: 6403e9d8e85a67e4282473ebc1fdfe8d, type: 2}
+    - target: {fileID: 5866666021909216657, guid: c55358403a29e1b48a82448ef4e12f6f, type: 3}
+      propertyPath: m_WarningMessage
+      value: "\nBinding warning: Some generic clip(s) animate transforms that are
+        already bound by a Humanoid avatar. These transforms can only be changed
+        by Humanoid clips.\n\tTransform 'mixamorig:Hips'\n\tTransform 'mixamorig:LeftFoot'\n\tTransform
+        'mixamorig:LeftHandThumb2'\n\tTransform 'mixamorig:LeftHandIndex1'\n\tTransform
+        'mixamorig:LeftHandPinky2'\n\tTransform 'mixamorig:RightHandRing2'\n\tTransform
+        'mixamorig:Spine1'\n\tTransform 'mixamorig:LeftToeBase'\n\tTransform 'mixamorig:LeftHandThumb3'\n\tTransform
+        'mixamorig:RightArm'\n\tand more ...\n\tFrom animation clip 'Idle'\n\tFrom
+        animation clip 'Forward'\n\tFrom animation clip 'Backward'\n\tFrom animation
+        clip 'RightRun'\n\tFrom animation clip 'LeftRun'\n\tFrom animation clip 'Combo'\n\tFrom
+        animation clip 'Roll'\n\tFrom animation clip 'Sword And Shield Block Idle'\n\tFrom
+        animation clip 'Sword And Shield Impact'"
+      objectReference: {fileID: 0}
     - target: {fileID: 6000407479487422213, guid: c55358403a29e1b48a82448ef4e12f6f, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
       value: 57.79932
