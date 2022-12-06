@@ -71,6 +71,10 @@ public class Enemy : CharacterMovement, IBattle
                 break;
             case STATE.Battle:
                 if(!myAnim.GetBool("IsAttacking")) myInfo.curAttackDelay += Time.deltaTime;
+                if(mySenser.myTarget != null && !mySenser.myTarget.IsLive)
+                {
+                    mySenser.OnLostTarget();
+                }
                 break;
         }
     }
@@ -82,6 +86,27 @@ public class Enemy : CharacterMovement, IBattle
             {
                 myInfo.curAttackDelay = 0.0f;
                 myAnim.SetTrigger("Attack");
+                int rand = Random.Range(0, 100);
+                if (rand >= 80)
+                {
+                    myAnim.SetInteger("InputAttack", 0);
+                }
+                else if(80 > rand && rand >= 55)
+                {
+                    myAnim.SetInteger("InputAttack", 1);
+                }
+                else if (55 > rand && rand >= 40)
+                {
+                    myAnim.SetInteger("InputAttack", 2);
+                }
+                else if (40 > rand && rand >= 10)
+                {
+                    myAnim.SetInteger("InputAttack", 3);
+                }
+                else
+                {
+                    myAnim.SetInteger("InputAttack", 4);
+                }
             }
         }
     }
@@ -133,9 +158,17 @@ public class Enemy : CharacterMovement, IBattle
             ib?.OnDamage(30.0f);
         }
     }
-        // Start is called before the first frame update
-        void Start()
+    bool Changerable()
     {
+        return myState != STATE.Death;
+    }
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        mySenser.FindTarget += () => { if (Changerable()) ChangeState(STATE.Battle); };
+        mySenser.LostTarget += () => { if (Changerable()) ChangeState(STATE.Normal); };
+
         ChangeState(STATE.Normal);
     }
 
