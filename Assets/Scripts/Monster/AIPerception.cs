@@ -6,7 +6,6 @@ public class AIPerception : MonoBehaviour
 {
     public LayerMask myEnemy = default;
     public List<GameObject> myEnemylist = new List<GameObject>();
-    public GameObject Mob;
     public IBattle myTarget = null;
     public event MyAction FindTarget = null;
     public event MyAction LostTarget = null;

@@ -10,13 +10,16 @@ public class Enemy : CharacterMovement, IBattle
     public Transform SwipingPosition;
     public Transform RunAttackPosition;
     public Transform JumpAttackPosition;
-
+    public Transform myHeadPos;
     public enum STATE
     {
         Create, Normal, Battle, Death
     }
     public STATE myState = STATE.Create;
     public AIPerception mySenser = null;
+    public GameObject myPos;
+    public MeshFilter myFilter;
+    Vector3 StartPos = Vector3.zero;
     public void OnDamage(float dmg)
     {
         myInfo.CurHP -= dmg;
@@ -50,7 +53,7 @@ public class Enemy : CharacterMovement, IBattle
                 break;
             case STATE.Battle:
                 StopAllCoroutines();
-                FollowTarget(mySenser.myTarget.transform, myInfo.MoveSpeed, myInfo.RotSpeed, OnAttack);
+                FollowTarget(mySenser.myTarget.transform, myPos.transform, myInfo.MoveSpeed, myInfo.RotSpeed, OnAttack);
                 break;
             case STATE.Death:
                 StopAllCoroutines();
@@ -78,6 +81,7 @@ public class Enemy : CharacterMovement, IBattle
                 break;
         }
     }
+
     void OnAttack()
     {
         if(!myAnim.GetBool("IsAttacking"))
@@ -90,31 +94,36 @@ public class Enemy : CharacterMovement, IBattle
                 if (rand >= 80)
                 {
                     myAnim.SetInteger("InputAttack", 0);
+                    PunchAttack();
                 }
                 else if(80 > rand && rand >= 55)
                 {
                     myAnim.SetInteger("InputAttack", 1);
+                    BreathAttack();
                 }
                 else if (55 > rand && rand >= 40)
                 {
                     myAnim.SetInteger("InputAttack", 2);
+                    RunAttack();
                 }
                 else if (40 > rand && rand >= 10)
                 {
                     myAnim.SetInteger("InputAttack", 3);
+                    SwipingAttack();
                 }
                 else
                 {
                     myAnim.SetInteger("InputAttack", 4);
+                    JumpAttack();
                 }
             }
         }
     }
 
-    public void PunchAttack()
+    void PunchAttack()
     {
-        Vector3 pos1 = new Vector3(PunchPosition.position.x, PunchPosition.position.y - 0.25f, PunchPosition.position.z);
-        Vector3 pos2 = new Vector3(PunchPosition.position.x, PunchPosition.position.y + 0.25f, PunchPosition.position.z);
+        Vector3 pos1 = PunchPosition.position + PunchPosition.up * -0.25f;
+        Vector3 pos2 = PunchPosition.position + PunchPosition.up * 0.25f;
         Collider[] list = Physics.OverlapCapsule(pos1, pos2, 0.18f, TargetMask);
         foreach (Collider col in list)
         {
@@ -123,10 +132,10 @@ public class Enemy : CharacterMovement, IBattle
         }
     }
 
-    public void SwipingAttack()
+    void SwipingAttack()
     {
-        Vector3 pos1 = new Vector3(SwipingPosition.position.x, SwipingPosition.position.y - 0.5f, SwipingPosition.position.z);
-        Vector3 pos2 = new Vector3(SwipingPosition.position.x, SwipingPosition.position.y + 0.5f, SwipingPosition.position.z);
+        Vector3 pos1 = SwipingPosition.position + SwipingPosition.up * -0.5f;
+        Vector3 pos2 = SwipingPosition.position + SwipingPosition.up * 0.5f;
         Collider[] list = Physics.OverlapCapsule(pos1, pos2, 0.2f, TargetMask);
         foreach (Collider col in list)
         {
@@ -136,10 +145,10 @@ public class Enemy : CharacterMovement, IBattle
         }
     }
 
-    public void RunAttack()
+    void RunAttack() // 범위 다시 지정해야 됨
     {
-        Vector3 pos1 = new Vector3(RunAttackPosition.position.x, RunAttackPosition.position.y - 0.5f, RunAttackPosition.position.z);
-        Vector3 pos2 = new Vector3(RunAttackPosition.position.x, RunAttackPosition.position.y + 0.5f, RunAttackPosition.position.z);
+        Vector3 pos1 = RunAttackPosition.position + RunAttackPosition.up * -0.5f;
+        Vector3 pos2 = RunAttackPosition.position + RunAttackPosition.up * 0.5f;
         Collider[] list = Physics.OverlapCapsule(pos1, pos2, 0.2f, TargetMask);
         foreach (Collider col in list)
         {
@@ -149,7 +158,7 @@ public class Enemy : CharacterMovement, IBattle
         }
     }
 
-    public void JumpAttack()
+    void JumpAttack()
     {
         Collider[] list = Physics.OverlapSphere(JumpAttackPosition.position, 2.0f, TargetMask);
         foreach (Collider col in list)
@@ -158,6 +167,31 @@ public class Enemy : CharacterMovement, IBattle
             ib?.OnDamage(30.0f);
         }
     }
+
+    void BreathAttack()
+    {
+
+
+
+    }
+
+    void TrianglesMesh()
+    {
+        float angleRange = 30.0f;
+        float distance = 2.0f;
+        Vector3[] myDirs = new Vector3[3];
+        Vector3 dir = myHeadPos.forward * distance;
+        myDirs[0] = myHeadPos.localPosition;
+        myDirs[1] = myHeadPos.localPosition + Quaternion.AngleAxis(-angleRange / 2.0f, Vector3.up) * dir;
+        myDirs[2] = myHeadPos.localPosition + Quaternion.AngleAxis(angleRange / 2.0f, Vector3.up) * dir;
+        int[] triangles = new int[] { 0, 1, 2 };
+
+        Mesh _mesh = new Mesh();
+        _mesh.vertices = myDirs;
+        _mesh.triangles = triangles;
+        myFilter.mesh = _mesh;
+    }
+
     bool Changerable()
     {
         return myState != STATE.Death;
@@ -175,6 +209,7 @@ public class Enemy : CharacterMovement, IBattle
     // Update is called once per frame
     void Update()
     {
+        TrianglesMesh();
         StateProcess();
     }
 }

@@ -2,15 +2,42 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Player : CharacterProperty
+public class Player : CharacterProperty, IBattle
 {
     Vector2 desireDir = Vector2.zero;
     Vector2 curDir = Vector2.zero;
+
     public LayerMask EnemyMask = default;
+    public CharacterStat myInfo;
     public Transform myHitPosition;
     public float moveSpeed = 10.0f;
     bool IsComboable = false;
     int ClickCount = 0;
+
+    public void OnDamage(float dmg)
+    {
+        myInfo.CurHP -= dmg;
+        if (Mathf.Approximately(myInfo.CurHP, 0.0f))
+        {
+            myAnim.SetTrigger("Death");
+        }
+        else
+        {
+            myAnim.SetTrigger("Damage");
+        }
+    }
+    public bool IsLive
+    {
+        get
+        {
+            if (Mathf.Approximately(myInfo.CurHP, 0.0f))
+            {
+                return false;
+            }
+            return true;
+        }
+    }
+
     // Start is called before the first frame update
     void Start()
     {
