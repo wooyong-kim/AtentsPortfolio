@@ -44,11 +44,11 @@ public class CharacterMovement : MonoBehaviour
             dir.y = 0.0f;
             float dist = dir.magnitude;
 
-            Vector3 rot = Vector3.RotateTowards(mypos.forward, dir, RotSpeed * Mathf.Deg2Rad * Time.deltaTime, 0.0f);
-            mypos.rotation = Quaternion.LookRotation(rot);
-
-            if (!myAnim.GetBool("IsAttacking") && dist > AttackRange + 0.1f)
+            if (!myAnim.GetBool("IsAttacking") && dist > AttackRange + 0.5f)
             {
+                Vector3 rot = Vector3.RotateTowards(mypos.forward, dir, RotSpeed * Mathf.Deg2Rad * Time.deltaTime, 0.0f);
+                mypos.rotation = Quaternion.LookRotation(rot);
+
                 myAnim.SetBool("IsMoving", true);
                 dir.Normalize();
                 float delta = MovSpeed * Time.deltaTime;

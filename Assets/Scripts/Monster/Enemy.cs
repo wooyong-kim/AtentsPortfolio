@@ -20,6 +20,12 @@ public class Enemy : CharacterMovement, IBattle
     public GameObject myPos;
     public MeshFilter myFilter;
     Vector3 StartPos = Vector3.zero;
+
+    float angleRange;
+    float distance;
+    float BreathAngle;
+    float posDistance;
+
     public void OnDamage(float dmg)
     {
         myInfo.CurHP -= dmg;
@@ -89,8 +95,9 @@ public class Enemy : CharacterMovement, IBattle
             if(myInfo.curAttackDelay >= myInfo.AttackDelay)
             {
                 myInfo.curAttackDelay = 0.0f;
-                myAnim.SetTrigger("Attack");
-                int rand = Random.Range(0, 100);
+                // myAnim.SetTrigger("Attack");
+                // int rand = Random.Range(0, 100);
+                int rand = 60;
                 if (rand >= 80)
                 {
                     myAnim.SetInteger("InputAttack", 0);
@@ -170,9 +177,27 @@ public class Enemy : CharacterMovement, IBattle
 
     void BreathAttack()
     {
+        // Attack처럼 애니메이션 실행중 true, flase해서 fixupdata에서 onDamage 실행
+        // TrianglesMesh();
+        if (BreathAngle <= angleRange * 0.5f && posDistance < distance)
+        {
+            IBattle ib = mySenser.myTarget.transform.GetComponent<IBattle>();
+            ib.OnDamage(50.0f);
+            Debug.Log("Hit");
+        }
+    }
 
-
-
+    void BreathRange()
+    {
+        // 범위 각도 만큼 RaycasHit를 쏴서 히트되면 데미지 굳이? 범위 값 구해서 범위 안에 있으면 데미지 주면 가능인데
+        angleRange = 30.0f;
+        distance = 2.0f;
+        Vector3 playerPos = mySenser.myTarget.transform.position;
+        playerPos.y = myPos.transform.position.y;
+        BreathAngle = Vector3.Angle(myPos.transform.forward, (playerPos - myPos.transform.position).normalized);
+        // HeadPos가 바라보는 방향 벡터 값 HeadPos에서 Player의 방향 벡터 값의 각도
+        posDistance = Vector3.Distance(playerPos, myHeadPos.position);
+        Debug.Log("BreathAngle " + BreathAngle);
     }
 
     void TrianglesMesh()
@@ -180,10 +205,11 @@ public class Enemy : CharacterMovement, IBattle
         float angleRange = 30.0f;
         float distance = 2.0f;
         Vector3[] myDirs = new Vector3[3];
-        Vector3 dir = myHeadPos.forward * distance;
+        Vector3 dir = Vector3.forward * distance;
         myDirs[0] = myHeadPos.localPosition;
         myDirs[1] = myHeadPos.localPosition + Quaternion.AngleAxis(-angleRange / 2.0f, Vector3.up) * dir;
         myDirs[2] = myHeadPos.localPosition + Quaternion.AngleAxis(angleRange / 2.0f, Vector3.up) * dir;
+
         int[] triangles = new int[] { 0, 1, 2 };
 
         Mesh _mesh = new Mesh();
@@ -209,7 +235,11 @@ public class Enemy : CharacterMovement, IBattle
     // Update is called once per frame
     void Update()
     {
-        TrianglesMesh();
-        StateProcess();
+        StateProcess();  
+    }
+
+    private void FixedUpdate()
+    {
+        BreathRange();
     }
 }
