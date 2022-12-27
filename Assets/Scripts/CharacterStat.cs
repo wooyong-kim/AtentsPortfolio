@@ -18,6 +18,17 @@ public struct CharacterStat
         get => curHP;
         set => curHP = Mathf.Clamp(value, 0.0f, maxHp);
     }
+    [SerializeField] float maxEG;
+    [SerializeField] float curEG;
+    public float TotalEG
+    {
+        get => maxEG;
+    }
+    public float CurEG
+    {
+        get => curEG;
+        set => curEG = Mathf.Clamp(value, 0.0f, maxEG);
+    }
 
     [SerializeField] float moveSpeed;
     public float MoveSpeed
@@ -37,12 +48,22 @@ public struct CharacterStat
         get => attackDelay;
     }
 
-    public CharacterStat(float hp, float moveSpeed, float rotSpeed, float attackDelay)
+    [SerializeField] float egDelay;
+    public float curEgDelay;
+    public float EgDelay
     {
+        get => egDelay;
+    }
+
+    public CharacterStat(float hp, float eg, float moveSpeed, float rotSpeed, float attackDelay, float egDelay)
+    {
+        curEG = maxEG = eg;
         curHP = maxHp = hp;
         this.moveSpeed = moveSpeed;
         this.rotSpeed = rotSpeed;
         this.attackDelay = attackDelay;
         curAttackDelay = 0.0f;
+        this.egDelay = egDelay;
+        curEgDelay = 0.0f;
     }
 }

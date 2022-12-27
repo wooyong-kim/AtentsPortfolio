@@ -44,7 +44,7 @@ public class CharacterMovement : MonoBehaviour
             dir.y = 0.0f;
             float dist = dir.magnitude;
 
-            if (!myAnim.GetBool("IsAttacking") && dist > AttackRange + 0.5f)
+            if (!myAnim.GetBool("IsAttacking") && dist > AttackRange + 5.5f)
             {
                 Vector3 rot = Vector3.RotateTowards(mypos.forward, dir, RotSpeed * Mathf.Deg2Rad * Time.deltaTime, 0.0f);
                 mypos.rotation = Quaternion.LookRotation(rot);

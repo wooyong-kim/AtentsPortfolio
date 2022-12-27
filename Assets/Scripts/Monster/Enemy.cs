@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Enemy : CharacterMovement, IBattle
 {
@@ -11,6 +12,7 @@ public class Enemy : CharacterMovement, IBattle
     public Transform RunAttackPosition;
     public Transform JumpAttackPosition;
     public Transform myHeadPos;
+    public Slider myHpBar;
     public enum STATE
     {
         Create, Normal, Battle, Death
@@ -29,9 +31,14 @@ public class Enemy : CharacterMovement, IBattle
     public void OnDamage(float dmg)
     {
         myInfo.CurHP -= dmg;
-        if(Mathf.Approximately(myInfo.CurHP, 0.0f))
+        myHpBar.value = myInfo.CurHP / myInfo.TotalHP;
+        if (Mathf.Approximately(myInfo.CurHP, 0.0f))
         {
             ChangeState(STATE.Death);
+        }
+        else
+        {
+            myAnim.SetTrigger("Damage");
         }
     }
     public bool IsLive
@@ -55,13 +62,16 @@ public class Enemy : CharacterMovement, IBattle
                 break;
             case STATE.Normal:
                 StopAllCoroutines();
+                myHpBar.gameObject.SetActive(false);
                 myAnim.SetBool("IsMoving", false);
                 break;
             case STATE.Battle:
                 StopAllCoroutines();
+                myHpBar.gameObject.SetActive(true);
                 FollowTarget(mySenser.myTarget.transform, myPos.transform, myInfo.MoveSpeed, myInfo.RotSpeed, OnAttack);
                 break;
             case STATE.Death:
+                Destroy(myHpBar.gameObject);
                 StopAllCoroutines();
                 myAnim.SetTrigger("Death");
                 GetComponent<Collider>().enabled = false;
@@ -95,9 +105,9 @@ public class Enemy : CharacterMovement, IBattle
             if(myInfo.curAttackDelay >= myInfo.AttackDelay)
             {
                 myInfo.curAttackDelay = 0.0f;
-                // myAnim.SetTrigger("Attack");
-                // int rand = Random.Range(0, 100);
-                int rand = 60;
+                myAnim.SetTrigger("Attack");
+                int rand = Random.Range(0, 100);
+                // int rand = 60;
                 if (rand >= 80)
                 {
                     myAnim.SetInteger("InputAttack", 0);
@@ -131,7 +141,8 @@ public class Enemy : CharacterMovement, IBattle
     {
         Vector3 pos1 = PunchPosition.position + PunchPosition.up * -0.25f;
         Vector3 pos2 = PunchPosition.position + PunchPosition.up * 0.25f;
-        Collider[] list = Physics.OverlapCapsule(pos1, pos2, 0.18f, TargetMask);
+        // Collider[] list = Physics.OverlapCapsule(pos1, pos2, 0.18f, TargetMask);
+        Collider[] list = Physics.OverlapSphere(PunchPosition.position, 2.0f, TargetMask);
         foreach (Collider col in list)
         {
             IBattle ib = col.GetComponent<IBattle>();
@@ -143,7 +154,8 @@ public class Enemy : CharacterMovement, IBattle
     {
         Vector3 pos1 = SwipingPosition.position + SwipingPosition.up * -0.5f;
         Vector3 pos2 = SwipingPosition.position + SwipingPosition.up * 0.5f;
-        Collider[] list = Physics.OverlapCapsule(pos1, pos2, 0.2f, TargetMask);
+        // Collider[] list = Physics.OverlapCapsule(pos1, pos2, 0.2f, TargetMask);
+        Collider[] list = Physics.OverlapSphere(SwipingPosition.position, 2.0f, TargetMask);
         foreach (Collider col in list)
         {
             IBattle ib = col.GetComponent<IBattle>();
@@ -156,7 +168,8 @@ public class Enemy : CharacterMovement, IBattle
     {
         Vector3 pos1 = RunAttackPosition.position + RunAttackPosition.up * -0.5f;
         Vector3 pos2 = RunAttackPosition.position + RunAttackPosition.up * 0.5f;
-        Collider[] list = Physics.OverlapCapsule(pos1, pos2, 0.2f, TargetMask);
+        // Collider[] list = Physics.OverlapCapsule(pos1, pos2, 0.2f, TargetMask);
+        Collider[] list = Physics.OverlapSphere(RunAttackPosition.position, 2.0f, TargetMask);
         foreach (Collider col in list)
         {
             IBattle ib = col.GetComponent<IBattle>();
@@ -183,7 +196,7 @@ public class Enemy : CharacterMovement, IBattle
         {
             IBattle ib = mySenser.myTarget.transform.GetComponent<IBattle>();
             ib.OnDamage(50.0f);
-            Debug.Log("Hit");
+            // Debug.Log("Hit");
         }
     }
 
@@ -193,11 +206,11 @@ public class Enemy : CharacterMovement, IBattle
         angleRange = 30.0f;
         distance = 2.0f;
         Vector3 playerPos = mySenser.myTarget.transform.position;
-        playerPos.y = myPos.transform.position.y;
-        BreathAngle = Vector3.Angle(myPos.transform.forward, (playerPos - myPos.transform.position).normalized);
+        playerPos.y = myHeadPos.transform.position.y;
+        BreathAngle = Vector3.Angle(myPos.transform.forward, (playerPos - myHeadPos.transform.position).normalized);
         // HeadPos가 바라보는 방향 벡터 값 HeadPos에서 Player의 방향 벡터 값의 각도
         posDistance = Vector3.Distance(playerPos, myHeadPos.position);
-        Debug.Log("BreathAngle " + BreathAngle);
+        // Debug.Log("BreathAngle " + BreathAngle);
     }
 
     void TrianglesMesh()
@@ -240,6 +253,7 @@ public class Enemy : CharacterMovement, IBattle
 
     private void FixedUpdate()
     {
-        BreathRange();
+        // BreathRange();
+        // TrianglesMesh();
     }
 }

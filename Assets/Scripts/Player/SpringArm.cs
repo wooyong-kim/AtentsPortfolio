@@ -6,6 +6,7 @@ using UnityEngine;
 public class SpringArm : MonoBehaviour
 {
     public LayerMask CrashMask;
+    public LayerMask CrashMask2;
     public Transform myCam = null;
     public float rotSpeed = 5.0f;
     public float zoomSpeed = 5.0f;
@@ -61,7 +62,8 @@ public class SpringArm : MonoBehaviour
         ray.origin = transform.position; // 월드 공간에서 ray의 현재 위치
         ray.direction = -transform.forward; // ray의 진행 방향
         float checkDist = Mathf.Min(curCamDist, desirDist);
-        if (Physics.Raycast(ray, out RaycastHit hit, checkDist + OffsetDist + 0.01f, CrashMask))
+        if (Physics.Raycast(ray, out RaycastHit hit, checkDist + OffsetDist + 0.01f, CrashMask)
+            || Physics.Raycast(ray, out hit, checkDist + OffsetDist + 0.01f, CrashMask2))
         {
             curCamDist = Vector3.Distance(transform.position, hit.point + myCam.forward * OffsetDist);
             // 카메라 땅에 박힘 방지
