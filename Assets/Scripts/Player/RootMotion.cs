@@ -5,16 +5,17 @@ using UnityEngine;
 public class RootMotion : MonoBehaviour
 {
     Vector3 moveDelta = Vector3.zero;
+
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
     private void FixedUpdate()
     {
