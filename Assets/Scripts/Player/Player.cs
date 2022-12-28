@@ -106,16 +106,19 @@ public class Player : CharacterProperty, IBattle
         desireDir.x = Input.GetAxisRaw("Horizontal");
         desireDir.z = Input.GetAxisRaw("Vertical");
 
+        bool isOnSlope = IsOnSlope();
 
-        if(CalculateNextFrameGroundAngle(moveSpeed) < maxSlopeAngle)
+        if (CalculateNextFrameGroundAngle(moveSpeed) < maxSlopeAngle)
         {
-            curDir.x = Mathf.Lerp(curDir.x, desireDir.x, Time.deltaTime * moveSpeed);
-            curDir.z = Mathf.Lerp(curDir.z, desireDir.z, Time.deltaTime * moveSpeed);
+            if (isOnSlope) // 경사면 위에 있으면
+            {
+                myRigid.velocity = AdjustDirectionToSlope(desireDir);
+                gravity = 0.0f;
+            }
         }
-        else
-        {
-            curDir = Vector3.zero;
-        }
+
+        curDir.x = Mathf.Lerp(curDir.x, desireDir.x, Time.deltaTime * moveSpeed);
+        curDir.z = Mathf.Lerp(curDir.z, desireDir.z, Time.deltaTime * moveSpeed);
 
         myAnim.SetFloat("x", curDir.x);
         myAnim.SetFloat("z", curDir.z);
@@ -130,13 +133,6 @@ public class Player : CharacterProperty, IBattle
         else
         {
             myAnim.SetBool("IsMoving", false);
-        }
-
-        bool isOnSlope = IsOnSlope();
-        if (isOnSlope)
-        {
-            // yVelocity = AdjustDirectionToSlope(desireDir);
-            gravity = 0.0f;
         }
     }
 
