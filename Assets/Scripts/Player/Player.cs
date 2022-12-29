@@ -18,6 +18,7 @@ public class Player : CharacterProperty, IBattle
 
     public float moveSpeed = 10.0f;
     bool IsComboable = false;
+    bool isMove = false;
     int ClickCount = 0;
 
     float gravity = 2.5f; // 중력 변수
@@ -28,7 +29,8 @@ public class Player : CharacterProperty, IBattle
     RaycastHit slopHit;
     public float maxSlopeAngle = 30.0f;
 
-    public Transform raycast;
+    public Transform nextFrameRaycast;
+    public Transform groundCheck;
 
     public void OnDamage(float dmg)
     {
@@ -74,7 +76,7 @@ public class Player : CharacterProperty, IBattle
 
     float CalculateNextFrameGroundAngle(float moveSpeed) // 다음 프레임의 지면 각도
     {
-        var nextFramePlayerPosition = raycast.position + desireDir * moveSpeed * Time.deltaTime;
+        var nextFramePlayerPosition = nextFrameRaycast.position + desireDir * moveSpeed * Time.deltaTime;
         if (Physics.Raycast(nextFramePlayerPosition, Vector3.down, out RaycastHit hitInfo, 2.0f, LayerMask.GetMask("Ground")))
         {
             return Vector3.Angle(Vector3.up, hitInfo.normal);
@@ -103,22 +105,40 @@ public class Player : CharacterProperty, IBattle
 
     void Move()
     {
+        bool isOnSlope = IsOnSlope();
+        bool isGrounded = IsGrounded();
+        bool wallCrash = WallCrash();
+
         desireDir.x = Input.GetAxisRaw("Horizontal");
         desireDir.z = Input.GetAxisRaw("Vertical");
 
-        bool isOnSlope = IsOnSlope();
-
         if (CalculateNextFrameGroundAngle(moveSpeed) < maxSlopeAngle)
         {
-            if (isOnSlope) // 경사면 위에 있으면
+            if (isOnSlope && isGrounded) // 경사면 위에 있으면
             {
+                if(!isMove)
+                {
+                    myRigid.constraints = RigidbodyConstraints.FreezeAll;
+                }                
                 myRigid.velocity = AdjustDirectionToSlope(desireDir);
                 gravity = 0.0f;
+                myRigid.useGravity = false;
+            }
+            else
+            {
+                myRigid.constraints = RigidbodyConstraints.FreezeRotation;
+                gravity = 2.5f;
+                myRigid.useGravity = true;
             }
         }
 
         curDir.x = Mathf.Lerp(curDir.x, desireDir.x, Time.deltaTime * moveSpeed);
         curDir.z = Mathf.Lerp(curDir.z, desireDir.z, Time.deltaTime * moveSpeed);
+
+        if(wallCrash)
+        {
+            AnimatorRootMotionMove();
+        }
 
         myAnim.SetFloat("x", curDir.x);
         myAnim.SetFloat("z", curDir.z);
@@ -129,10 +149,12 @@ public class Player : CharacterProperty, IBattle
         if (x > 0 || z > 0)
         {
             myAnim.SetBool("IsMoving", true);
+            isMove = true;
         }
         else
         {
             myAnim.SetBool("IsMoving", false);
+            isMove = false;
         }
     }
 
@@ -149,7 +171,8 @@ public class Player : CharacterProperty, IBattle
 
     bool StairsCrash()
     {
-        if (PlayerStairs(transform.right) || PlayerStairs(transform.forward) || PlayerStairs(-transform.right) || PlayerStairs(-transform.forward))
+        if (PlayerStairs(transform.right) || PlayerStairs(transform.forward) 
+            || PlayerStairs(-transform.right) || PlayerStairs(-transform.forward))
         {
             return true;
         }
@@ -179,6 +202,12 @@ public class Player : CharacterProperty, IBattle
             return anlge != 0.0f && anlge < maxSlopeAngle;
         }
         return false;
+    }
+
+    bool IsGrounded()
+    {
+        Vector3 boxSize = new Vector3(transform.lossyScale.x, 0.4f, transform.lossyScale.z);
+        return Physics.CheckBox(groundCheck.position, boxSize, Quaternion.identity, LayerMask.GetMask("Ground"));
     }
 
     void Gravity() // 중력
