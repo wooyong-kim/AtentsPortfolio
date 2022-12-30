@@ -12,6 +12,7 @@ public class ItemDropCheck : MonoBehaviour
     bool DropCheck = false; // 습득 가능 체크
     RaycastHit hitInfo;
     public LayerMask ItemLayerMask;
+    public UI theUI;
     [SerializeField]
     TextMeshProUGUI ShowText;
 
@@ -68,6 +69,7 @@ public class ItemDropCheck : MonoBehaviour
             {
                 // StartCoroutine(CanPickupcountTime(2.0f, 5.0f));
                 Destroy(hitInfo.transform.gameObject);
+                theUI.AcquireItem(hitInfo.transform.GetComponent<ItemPickup>().item);
                 ItemInfoDisAppear();
             }
         }
