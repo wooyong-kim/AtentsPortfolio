@@ -7,6 +7,7 @@ public class Item : ScriptableObject
 {
     public string itemName; // 아이템 이름
     public Sprite itemImage; // 아이템 이미지
+    public GameObject itemPrefab;
     public float itemAbility; // 아이템 능력
     public int itemValue; // 아이템 가격
     public int itemCount; // 아이템 개수

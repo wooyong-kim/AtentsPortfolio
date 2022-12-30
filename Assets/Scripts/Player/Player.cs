@@ -119,10 +119,12 @@ public class Player : CharacterProperty, IBattle
                 if(!isMove)
                 {
                     myRigid.constraints = RigidbodyConstraints.FreezeAll;
-                }                
-                myRigid.velocity = AdjustDirectionToSlope(desireDir);
+                }
+                Vector3 dir = Quaternion.Euler(0, Camera.main.transform.rotation.eulerAngles.y, 0) * desireDir;
+                myRigid.velocity = AdjustDirectionToSlope(dir); // desireDir의 벡터 방향을 월드에서 카메라 기준으로 변경
+                //myRigid.velocity = AdjustDirectionToSlope(desireDir);
                 gravity = 0.0f;
-                myRigid.useGravity = false;
+                myRigid.useGravity = false;                
             }
             else
             {
@@ -146,7 +148,7 @@ public class Player : CharacterProperty, IBattle
         float x = Mathf.Round(Mathf.Abs(curDir.x));
         float z = Mathf.Round(Mathf.Abs(curDir.z));
 
-        if (x > 0 || z > 0)
+        if (!Mathf.Approximately(x, 0.0f) || !Mathf.Approximately(z, 0.0f))
         {
             myAnim.SetBool("IsMoving", true);
             isMove = true;
@@ -195,7 +197,7 @@ public class Player : CharacterProperty, IBattle
 
     bool IsOnSlope() // Player 바닥의 경사 확인
     {
-        Ray ray = new Ray(transform.position, Vector3.down);
+        Ray ray = new Ray(transform.position + Vector3.up * 1.0f, Vector3.down);
         if (Physics.Raycast(ray, out slopHit, 2.0f, LayerMask.GetMask("Ground")))
         {
             var anlge = Vector3.Angle(Vector3.up, slopHit.normal);
