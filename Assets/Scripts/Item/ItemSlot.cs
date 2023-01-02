@@ -1,12 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
-
 using TMPro;
-
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
-public class ItemSlot : MonoBehaviour
+public class ItemSlot : MonoBehaviour//, IPointerClickHandler, IBeginDragHandler, IEndDragHandler, IDragHandler, IDropHandler
 {
     public Item item; // »πµÊ æ∆¿Ã≈€
     public int itemCount; // æ∆¿Ã≈€ ∞≥ºˆ
@@ -27,7 +26,15 @@ public class ItemSlot : MonoBehaviour
         itemCount = _count;
         itemImage.sprite = item.itemImage;
 
-        text_Count.text = itemCount.ToString();
+        if(item.itemtype != Item.ItemType.Equipment)
+        {
+            text_Count.text = itemCount.ToString();
+        }
+        else
+        {
+            text_Count.text = "0";
+        }
+        
         SetColor(1);
     }
 

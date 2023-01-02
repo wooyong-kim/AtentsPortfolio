@@ -61,15 +61,18 @@ public class UI: MonoBehaviour
 
     public void AcquireItem(Item _item, int _count = 1)
     {
-        for(int i = 0; i < slots.Count; ++i) // 중복 아이템 확인
+        if(Item.ItemType.Equipment != _item.itemtype)
         {
-            if(slots[i].GetComponentInChildren<ItemSlot>().item != null)
+            for (int i = 0; i < slots.Count; ++i) // 중복 아이템 확인
             {
-                if(slots[i].GetComponentInChildren<ItemSlot>().item.itemName == _item.itemName)
+                if (slots[i].GetComponentInChildren<ItemSlot>().item != null)
                 {
-                    // 같은 이름이 있으면 +_count
-                    slots[i].GetComponentInChildren<ItemSlot>().SetSlotCount(_count);
-                    return;
+                    if (slots[i].GetComponentInChildren<ItemSlot>().item.itemName == _item.itemName)
+                    {
+                        // 같은 이름이 있으면 +_count
+                        slots[i].GetComponentInChildren<ItemSlot>().SetSlotCount(_count);
+                        return;
+                    }
                 }
             }
         }
