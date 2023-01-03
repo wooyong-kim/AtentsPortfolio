@@ -5,6 +5,11 @@ using UnityEngine;
 [System.Serializable]
 public struct CharacterStat
 {
+    [SerializeField] int Lv;
+    public int LV
+    {
+        get => Lv;
+    }
     //ÇÊµå ( Field )
     [SerializeField] float maxHp;
     [SerializeField] float curHP;
@@ -18,16 +23,22 @@ public struct CharacterStat
         get => curHP;
         set => curHP = Mathf.Clamp(value, 0.0f, maxHp);
     }
-    [SerializeField] float maxEG;
-    [SerializeField] float curEG;
-    public float TotalEG
+    [SerializeField] float maxSP;
+    [SerializeField] float curSP;
+    public float TotalSP
     {
-        get => maxEG;
+        get => maxSP;
     }
-    public float CurEG
+    public float CurSP
     {
-        get => curEG;
-        set => curEG = Mathf.Clamp(value, 0.0f, maxEG);
+        get => curSP;
+        set => curSP = Mathf.Clamp(value, 0.0f, maxSP);
+    }
+
+    [SerializeField] float attackDG;
+    public float AttackDG
+    {
+        get => attackDG;
     }
 
     [SerializeField] float moveSpeed;
@@ -48,22 +59,24 @@ public struct CharacterStat
         get => attackDelay;
     }
 
-    [SerializeField] float egDelay;
-    public float curEgDelay;
-    public float EgDelay
+    [SerializeField] float spDelay;
+    public float curSpDelay;
+    public float SpDelay
     {
-        get => egDelay;
+        get => spDelay;
     }
 
-    public CharacterStat(float hp, float eg, float moveSpeed, float rotSpeed, float attackDelay, float egDelay)
+    public CharacterStat(int Lv, float hp, float sp, float attackDG, float moveSpeed, float rotSpeed, float attackDelay, float spDelay)
     {
-        curEG = maxEG = eg;
+        this.Lv = Lv;
+        curSP = maxSP = sp;
         curHP = maxHp = hp;
+        this.attackDG = attackDG;
         this.moveSpeed = moveSpeed;
         this.rotSpeed = rotSpeed;
         this.attackDelay = attackDelay;
         curAttackDelay = 0.0f;
-        this.egDelay = egDelay;
-        curEgDelay = 0.0f;
+        this.spDelay = spDelay;
+        curSpDelay = 0.0f;
     }
 }

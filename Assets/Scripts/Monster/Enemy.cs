@@ -19,7 +19,6 @@ public class Enemy : CharacterMovement, IBattle
     }
     public STATE myState = STATE.Create;
     public AIPerception mySenser = null;
-    public GameObject myPos;
     public MeshFilter myFilter;
     Vector3 StartPos = Vector3.zero;
 
@@ -68,7 +67,7 @@ public class Enemy : CharacterMovement, IBattle
             case STATE.Battle:
                 StopAllCoroutines();
                 myHpBar.gameObject.SetActive(true);
-                FollowTarget(mySenser.myTarget.transform, myPos.transform, myInfo.MoveSpeed, myInfo.RotSpeed, OnAttack);
+                FollowTarget(mySenser.myTarget.transform, transform, myInfo.MoveSpeed, myInfo.RotSpeed, OnAttack);
                 break;
             case STATE.Death:
                 Destroy(myHpBar.gameObject);
@@ -207,7 +206,7 @@ public class Enemy : CharacterMovement, IBattle
         distance = 2.0f;
         Vector3 playerPos = mySenser.myTarget.transform.position;
         playerPos.y = myHeadPos.transform.position.y;
-        BreathAngle = Vector3.Angle(myPos.transform.forward, (playerPos - myHeadPos.transform.position).normalized);
+        BreathAngle = Vector3.Angle(transform.forward, (playerPos - myHeadPos.transform.position).normalized);
         // HeadPos가 바라보는 방향 벡터 값 HeadPos에서 Player의 방향 벡터 값의 각도
         posDistance = Vector3.Distance(playerPos, myHeadPos.position);
         // Debug.Log("BreathAngle " + BreathAngle);
@@ -255,5 +254,6 @@ public class Enemy : CharacterMovement, IBattle
     {
         // BreathRange();
         // TrianglesMesh();
+        myRigid.velocity = Vector3.zero;
     }
 }

@@ -7,7 +7,6 @@ public class Player : CharacterProperty, IBattle
 {
     Vector3 desireDir = Vector2.zero;
     Vector3 curDir = Vector2.zero;
-    float posY;
 
     public LayerMask EnemyMask = default;
     public CharacterStat myInfo;
@@ -36,8 +35,7 @@ public class Player : CharacterProperty, IBattle
     {
         if (IsLive)
         {
-            myInfo.CurHP -= dmg;
-            myHpBar.value = myInfo.CurHP / myInfo.TotalHP;
+            myInfo.CurHP -= dmg;          
             if (Mathf.Approximately(myInfo.CurHP, 0.0f))
             {
                 myAnim.SetTrigger("Death");
@@ -63,7 +61,6 @@ public class Player : CharacterProperty, IBattle
     // Start is called before the first frame update
     void Start()
     {
-        posY = transform.position.y;
     }
     private void FixedUpdate()
     {
@@ -87,7 +84,7 @@ public class Player : CharacterProperty, IBattle
     // Update is called once per frame
     void Update()
     {
-        if (IsLive)
+        if (IsLive && !UI.inventoryActivated)
         {
             Move();
             Gravity(); // ม฿ทย
@@ -95,10 +92,11 @@ public class Player : CharacterProperty, IBattle
             Shield();
             Sit();
             Roll();
-            myInfo.curEgDelay += Time.deltaTime;
-            if (myInfo.curEgDelay >= myInfo.EgDelay)
+            myInfo.curSpDelay += Time.deltaTime;
+            myHpBar.value = myInfo.CurHP / myInfo.TotalHP;
+            if (myInfo.curSpDelay >= myInfo.SpDelay)
             {
-                myInfo.CurEG += 10.0f * Time.deltaTime;
+                myInfo.CurSP += 10.0f * Time.deltaTime;
             }
         }
     }
@@ -227,15 +225,15 @@ public class Player : CharacterProperty, IBattle
 
     void Attack()
     {
-        if(!(myInfo.CurEG < 30.0f))
+        if(!(myInfo.CurSP < 15.0f))
         {
             if (!myAnim.GetBool("IsAttacking") && !myAnim.GetBool("IsRoll"))
             {
                 if (Input.GetMouseButtonDown(0))
                 {
                     myAnim.SetTrigger("ComboAttack");
-                    myInfo.curEgDelay = 0.0f;
-                    myInfo.CurEG -= 30.0f;
+                    myInfo.curSpDelay = 0.0f;
+                    myInfo.CurSP -= 15.0f;
                 }
             }
 
@@ -244,11 +242,11 @@ public class Player : CharacterProperty, IBattle
                 if (Input.GetMouseButtonDown(0))
                 {
                     ClickCount++;
-                    myInfo.curEgDelay = 0.0f;
-                    myInfo.CurEG -= 30.0f;
+                    myInfo.curSpDelay = 0.0f;
+                    myInfo.CurSP -= 15.0f;
                 }
             }
-            myEgBar.value = myInfo.CurEG / myInfo.TotalEG;
+            myEgBar.value = myInfo.CurSP / myInfo.TotalSP;
         }
     }
 
@@ -287,24 +285,24 @@ public class Player : CharacterProperty, IBattle
 
     void Roll()
     {
-        if(!(myInfo.CurEG < 20.0f))
+        if(!(myInfo.CurSP < 20.0f))
         {
             if (!myAnim.GetBool("IsAttacking") && !myAnim.GetBool("IsRoll"))
             {
                 if (Input.GetKeyDown(KeyCode.Space))
                 {
                     myAnim.SetTrigger("Roll");
-                    myInfo.curEgDelay = 0.0f;
-                    myInfo.CurEG -= 20.0f;
+                    myInfo.curSpDelay = 0.0f;
+                    myInfo.CurSP -= 20.0f;
                 }
             }
-            myEgBar.value = myInfo.CurEG / myInfo.TotalEG;
+            myEgBar.value = myInfo.CurSP / myInfo.TotalSP;
         }
     }
 
     public void OnAttack()
     {
-        Collider[] list = Physics.OverlapSphere(myHitPosition.position, 0.5f, EnemyMask);
+        Collider[] list = Physics.OverlapSphere(myHitPosition.position, 1.0f, EnemyMask);
         foreach (Collider col in list)
         {
             IBattle ib = col.GetComponent<IBattle>();

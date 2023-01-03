@@ -32,42 +32,45 @@ public class SpringArm : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        desireRot.x += -Input.GetAxisRaw("Mouse Y") * rotSpeed;
-        desireRot.x = Mathf.Clamp(desireRot.x, RotateRange.x, RotateRange.y);
-
-        if (Input.GetKey(KeyCode.LeftAlt))
+        if(!UI.inventoryActivated)
         {
-            desireRot.y += Input.GetAxisRaw("Mouse X") * rotSpeed;
-        }
-        else
-        {
-            curRot.y = 0.0f;
-            transform.parent.Rotate(Vector3.up * Input.GetAxisRaw("Mouse X") * rotSpeed);
-        }
+            desireRot.x += -Input.GetAxisRaw("Mouse Y") * rotSpeed;
+            desireRot.x = Mathf.Clamp(desireRot.x, RotateRange.x, RotateRange.y);
 
-        curRot = Vector2.Lerp(curRot, desireRot, Time.deltaTime * SmoothDistSpeed);
+            if (Input.GetKey(KeyCode.LeftAlt))
+            {
+                desireRot.y += Input.GetAxisRaw("Mouse X") * rotSpeed;
+            }
+            else
+            {
+                curRot.y = 0.0f;
+                transform.parent.Rotate(Vector3.up * Input.GetAxisRaw("Mouse X") * rotSpeed);
+            }
 
-        Quaternion x = Quaternion.Euler(new Vector3(curRot.x, 0, 0));
-        Quaternion y = Quaternion.Euler(new Vector3(0, curRot.y, 0));
-        transform.localRotation = y * x; // 먼저 곱한 값의 이동을 한후 뒤에 곱한 값을 이동한다.(곱하는 순서가 중요함)
-        // x를 먼저 곱하면 x축 이동 후 y축 이동을 하여 축이 틀어져 캐릭터의 전방이 아닌 다른곳을 볼수도 있다.
-        if (Input.GetAxisRaw("Mouse ScrollWheel") > Mathf.Epsilon || Input.GetAxisRaw("Mouse ScrollWheel") < -Mathf.Epsilon)
-        {
-            desirDist -= Input.GetAxisRaw("Mouse ScrollWheel") * zoomSpeed;
-            desirDist = Mathf.Clamp(desirDist, ZoomRange.x, ZoomRange.y);
-        }
-        curCamDist = Mathf.Lerp(curCamDist, desirDist, Time.deltaTime * SmoothDistSpeed);
+            curRot = Vector2.Lerp(curRot, desireRot, Time.deltaTime * SmoothDistSpeed);
 
-        Ray ray = new Ray();
-        ray.origin = transform.position; // 월드 공간에서 ray의 현재 위치
-        ray.direction = -transform.forward; // ray의 진행 방향
-        float checkDist = Mathf.Min(curCamDist, desirDist);
-        if (Physics.Raycast(ray, out RaycastHit hit, checkDist + OffsetDist + 0.01f, CrashMask)
-            || Physics.Raycast(ray, out hit, checkDist + OffsetDist + 0.01f, CrashMask2))
-        {
-            curCamDist = Vector3.Distance(transform.position, hit.point + myCam.forward * OffsetDist);
-            // 카메라 땅에 박힘 방지
+            Quaternion x = Quaternion.Euler(new Vector3(curRot.x, 0, 0));
+            Quaternion y = Quaternion.Euler(new Vector3(0, curRot.y, 0));
+            transform.localRotation = y * x; // 먼저 곱한 값의 이동을 한후 뒤에 곱한 값을 이동한다.(곱하는 순서가 중요함)
+                                             // x를 먼저 곱하면 x축 이동 후 y축 이동을 하여 축이 틀어져 캐릭터의 전방이 아닌 다른곳을 볼수도 있다.
+            if (Input.GetAxisRaw("Mouse ScrollWheel") > Mathf.Epsilon || Input.GetAxisRaw("Mouse ScrollWheel") < -Mathf.Epsilon)
+            {
+                desirDist -= Input.GetAxisRaw("Mouse ScrollWheel") * zoomSpeed;
+                desirDist = Mathf.Clamp(desirDist, ZoomRange.x, ZoomRange.y);
+            }
+            curCamDist = Mathf.Lerp(curCamDist, desirDist, Time.deltaTime * SmoothDistSpeed);
+
+            Ray ray = new Ray();
+            ray.origin = transform.position; // 월드 공간에서 ray의 현재 위치
+            ray.direction = -transform.forward; // ray의 진행 방향
+            float checkDist = Mathf.Min(curCamDist, desirDist);
+            if (Physics.Raycast(ray, out RaycastHit hit, checkDist + OffsetDist + 0.01f, CrashMask)
+                || Physics.Raycast(ray, out hit, checkDist + OffsetDist + 0.01f, CrashMask2))
+            {
+                curCamDist = Vector3.Distance(transform.position, hit.point + myCam.forward * OffsetDist);
+                // 카메라 땅에 박힘 방지
+            }
+            myCam.transform.localPosition = new Vector3(0, 0, -curCamDist); // 원래 거리로 복구
         }
-        myCam.transform.localPosition = new Vector3(0, 0, -curCamDist); // 원래 거리로 복구
     }
 }

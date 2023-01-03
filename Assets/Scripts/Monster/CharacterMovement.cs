@@ -7,6 +7,21 @@ public delegate void MyAction<T>(T t);
 
 public class CharacterMovement : MonoBehaviour
 {
+    Rigidbody _rigid = null;
+    protected Rigidbody myRigid
+    {
+        get
+        {
+            if (_rigid == null)
+            {
+                _rigid = GetComponent<Rigidbody>();
+                if (_rigid == null)
+                    _rigid = GetComponentInChildren<Rigidbody>();
+            }
+            return _rigid;
+        }
+    }
+
     Animator _anim = null;
     protected Animator myAnim
     {
@@ -27,7 +42,7 @@ public class CharacterMovement : MonoBehaviour
     Coroutine coMove = null;
     Coroutine coRot = null;
 
-    protected void FollowTarget(Transform target, Transform mypos, float MovSpeed = 1.0f, float RotSpeed = 360.0f, MyAction reached = null)
+    protected void FollowTarget(Transform target, Transform mypos, float MovSpeed, float RotSpeed = 360.0f, MyAction reached = null)
     {
         if (coMove != null) StopCoroutine(coMove);
         coMove = StartCoroutine(FollowingTarget(target, mypos, MovSpeed, RotSpeed, reached));
@@ -57,7 +72,7 @@ public class CharacterMovement : MonoBehaviour
                     delta = dist - AttackRange;
                     myAnim.SetBool("IsMoving", false);
                 }
-                mypos.Translate(dir * delta, Space.World);
+                // mypos.Translate(dir * delta, Space.World);
             }
             else
             {
