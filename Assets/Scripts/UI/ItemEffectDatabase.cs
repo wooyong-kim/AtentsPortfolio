@@ -16,16 +16,16 @@ public class ItemEffectDatabase : MonoBehaviour
                 {
                     case HP:
                         thePlayerStatus.myInfo.CurHP += _item.itemAbility;
-                        if(thePlayerStatus.myInfo.CurHP > thePlayerStatus.myInfo.TotalHP)
+                        if(thePlayerStatus.myInfo.CurHP > thePlayerStatus.myInfo.MaxHp)
                         {
-                            thePlayerStatus.myInfo.CurHP = thePlayerStatus.myInfo.TotalHP;
+                            thePlayerStatus.myInfo.CurHP = thePlayerStatus.myInfo.MaxHp;
                         }
                         break;
                     case SP:
                         thePlayerStatus.myInfo.CurSP += _item.itemAbility;
-                        if (thePlayerStatus.myInfo.CurSP > thePlayerStatus.myInfo.TotalHP)
+                        if (thePlayerStatus.myInfo.CurSP > thePlayerStatus.myInfo.MaxSP)
                         {
-                            thePlayerStatus.myInfo.CurSP = thePlayerStatus.myInfo.TotalSP;
+                            thePlayerStatus.myInfo.CurSP = thePlayerStatus.myInfo.MaxSP;
                         }
                         break;
                 }

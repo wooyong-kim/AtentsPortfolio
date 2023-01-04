@@ -30,7 +30,7 @@ public class Enemy : CharacterMovement, IBattle
     public void OnDamage(float dmg)
     {
         myInfo.CurHP -= dmg;
-        myHpBar.value = myInfo.CurHP / myInfo.TotalHP;
+        myHpBar.value = myInfo.CurHP / myInfo.MaxHp;
         if (Mathf.Approximately(myInfo.CurHP, 0.0f))
         {
             ChangeState(STATE.Death);

@@ -61,6 +61,7 @@ public class Player : CharacterProperty, IBattle
     // Start is called before the first frame update
     void Start()
     {
+        FileManager.Inst.GetJsonPlayerData();
     }
     private void FixedUpdate()
     {
@@ -93,7 +94,7 @@ public class Player : CharacterProperty, IBattle
             Sit();
             Roll();
             myInfo.curSpDelay += Time.deltaTime;
-            myHpBar.value = myInfo.CurHP / myInfo.TotalHP;
+            myHpBar.value = myInfo.CurHP / myInfo.MaxHp;
             if (myInfo.curSpDelay >= myInfo.SpDelay)
             {
                 myInfo.CurSP += 10.0f * Time.deltaTime;
@@ -246,7 +247,7 @@ public class Player : CharacterProperty, IBattle
                     myInfo.CurSP -= 15.0f;
                 }
             }
-            myEgBar.value = myInfo.CurSP / myInfo.TotalSP;
+            myEgBar.value = myInfo.CurSP / myInfo.MaxSP;
         }
     }
 
@@ -296,7 +297,7 @@ public class Player : CharacterProperty, IBattle
                     myInfo.CurSP -= 20.0f;
                 }
             }
-            myEgBar.value = myInfo.CurSP / myInfo.TotalSP;
+            myEgBar.value = myInfo.CurSP / myInfo.MaxSP;
         }
     }
 

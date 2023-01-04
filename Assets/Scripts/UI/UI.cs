@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class UI: MonoBehaviour
@@ -13,11 +14,15 @@ public class UI: MonoBehaviour
 
     public List<Transform> slots = new List<Transform>(); // ½½·Ôµé ¹è¿­
     public List<Transform> stats = new List<Transform>(); // ½½·Ôµé ¹è¿­
+
+    string[] statsText;
+
     private void Awake()
     {
         if (Inst != null) Destroy(gameObject);
         Inst = this;
     }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -42,8 +47,9 @@ public class UI: MonoBehaviour
         if(Input.GetKeyDown(KeyCode.I))
         {
             inventoryActivated = !inventoryActivated;
+            PlayerStats();
 
-            if(inventoryActivated)
+            if (inventoryActivated)
             {
                 OpenInventory();
             }
@@ -94,10 +100,28 @@ public class UI: MonoBehaviour
 
     public void PlayerStats()
     {
-        float a = 0;
+        StartCoroutine(PlayerStatUI());
+
         for(int i = 0; i < stats.Count; ++i)
         {
-            stats[i].GetComponentInChildren<Stat>().statNum(a); // a = ½ºÅÝ°ª 
+            stats[i].GetComponent<StatUI>().TMP_Text.text = statsText[i];
+        }
+    }
+
+    public IEnumerator PlayerStatUI()
+    {
+        while (true)
+        {
+            statsText[0] = FileManager.PlayerJsonStat.LV.ToString();
+            statsText[1] = FileManager.PlayerJsonStat.Vigor.ToString();
+            statsText[2] = FileManager.PlayerJsonStat.Attunement.ToString();
+            statsText[3] = FileManager.PlayerJsonStat.Endurance.ToString();
+            statsText[4] = FileManager.PlayerJsonStat.Vitality.ToString();
+            statsText[5] = FileManager.PlayerJsonStat.Strength.ToString();
+            statsText[6] = FileManager.PlayerJsonStat.MaxHp.ToString();
+            statsText[7] = FileManager.PlayerJsonStat.MaxSP.ToString();
+
+            yield return null;
         }
     }
 }

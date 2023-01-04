@@ -3013,10 +3013,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 127020075}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eec5e2d728c00de42bd1391bb8574e66, type: 3}
+  m_Script: {fileID: 11500000, guid: fbc9bd6d36997a84da7e705e1d07a0bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  statNum: {fileID: 910711789}
+  TMP_Text: {fileID: 910711789}
 --- !u!1001 &133215337
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5566,10 +5566,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 344101834}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eec5e2d728c00de42bd1391bb8574e66, type: 3}
+  m_Script: {fileID: 11500000, guid: fbc9bd6d36997a84da7e705e1d07a0bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  statNum: {fileID: 1609225057}
+  TMP_Text: {fileID: 1609225057}
 --- !u!1001 &355718064
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7084,10 +7084,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 454538792}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eec5e2d728c00de42bd1391bb8574e66, type: 3}
+  m_Script: {fileID: 11500000, guid: fbc9bd6d36997a84da7e705e1d07a0bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  statNum: {fileID: 1951280545}
+  TMP_Text: {fileID: 1951280545}
 --- !u!1 &458767001
 GameObject:
   m_ObjectHideFlags: 0
@@ -9050,10 +9050,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 589764089}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eec5e2d728c00de42bd1391bb8574e66, type: 3}
+  m_Script: {fileID: 11500000, guid: fbc9bd6d36997a84da7e705e1d07a0bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  statNum: {fileID: 1936828467}
+  TMP_Text: {fileID: 1936828467}
 --- !u!1001 &590149960
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -10925,6 +10925,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   myInfo:
     Lv: 0
+    Souls: 0
     maxHp: 100
     curHP: 100
     maxSP: 0
@@ -10936,6 +10937,11 @@ MonoBehaviour:
     curAttackDelay: 0
     spDelay: 0
     curSpDelay: 0
+    vigor: 0
+    attunement: 0
+    endurance: 0
+    vitality: 0
+    strength: 0
   TargetMask:
     serializedVersion: 2
     m_Bits: 64
@@ -11932,10 +11938,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 851850356}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eec5e2d728c00de42bd1391bb8574e66, type: 3}
+  m_Script: {fileID: 11500000, guid: fbc9bd6d36997a84da7e705e1d07a0bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  statNum: {fileID: 494656048}
+  TMP_Text: {fileID: 494656048}
 --- !u!1 &858042449
 GameObject:
   m_ObjectHideFlags: 0
@@ -20073,10 +20079,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1308353355}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eec5e2d728c00de42bd1391bb8574e66, type: 3}
+  m_Script: {fileID: 11500000, guid: fbc9bd6d36997a84da7e705e1d07a0bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  statNum: {fileID: 1567166862}
+  TMP_Text: {fileID: 1567166862}
 --- !u!1 &1310373244
 GameObject:
   m_ObjectHideFlags: 0
@@ -27061,10 +27067,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1934123553}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eec5e2d728c00de42bd1391bb8574e66, type: 3}
+  m_Script: {fileID: 11500000, guid: fbc9bd6d36997a84da7e705e1d07a0bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  statNum: {fileID: 1949993397}
+  TMP_Text: {fileID: 1949993397}
 --- !u!1 &1936828465
 GameObject:
   m_ObjectHideFlags: 0
@@ -29114,10 +29120,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 2009221732}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eec5e2d728c00de42bd1391bb8574e66, type: 3}
+  m_Script: {fileID: 11500000, guid: fbc9bd6d36997a84da7e705e1d07a0bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  statNum: {fileID: 1485532683}
+  TMP_Text: {fileID: 1485532683}
 --- !u!1 &2012975344
 GameObject:
   m_ObjectHideFlags: 0
@@ -29359,6 +29365,7 @@ MonoBehaviour:
     m_Bits: 128
   myInfo:
     Lv: 1
+    Souls: 0
     maxHp: 1000
     curHP: 500
     maxSP: 100
@@ -29370,6 +29377,11 @@ MonoBehaviour:
     curAttackDelay: 0
     spDelay: 0
     curSpDelay: 0
+    vigor: 0
+    attunement: 0
+    endurance: 0
+    vitality: 0
+    strength: 0
   myHitPosition: {fileID: 894272511}
   myHpBar: {fileID: 22697272}
   myEgBar: {fileID: 292202497}
