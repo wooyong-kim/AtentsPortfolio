@@ -32,11 +32,15 @@ public class FileManager : MonoBehaviour
 
     public void GetJsonPlayerData()
     {
-        string filePath = Application.dataPath + "Player.Json";
-        if(File.Exists(filePath)) // 파일이 존재 하면
+        // string filePath = ;
+        if (File.Exists(Application.dataPath + "/Player.Json")) // 파일이 존재 하면
         {
             // LoadText(filePath);
-            PlayerJsonStat = LoadJson(filePath);
+            // PlayerJsonStat = LoadJson(filePath);
+
+            string json = File.ReadAllText(Application.dataPath + "/Player.Json");
+            PlayerJsonStat = JsonUtility.FromJson<CharacterStat>(json);
+            Debug.Log(PlayerJsonStat.CurHP);
         }
     }
 }

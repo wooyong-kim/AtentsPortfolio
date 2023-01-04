@@ -26,6 +26,8 @@ public class UI: MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        Ui.SetActive(false);
+
         for(int i = 0; i < ItemSetting.transform.childCount; ++i)
         {
             slots.Add(ItemSetting.transform.GetChild(i));
@@ -34,6 +36,7 @@ public class UI: MonoBehaviour
         {
             stats.Add(StatsSetting.transform.GetChild(i));
         }
+        FileManager.Inst.GetJsonPlayerData();
     }
 
     // Update is called once per frame
@@ -47,7 +50,7 @@ public class UI: MonoBehaviour
         if(Input.GetKeyDown(KeyCode.I))
         {
             inventoryActivated = !inventoryActivated;
-            PlayerStats();
+            //PlayerStats();
 
             if (inventoryActivated)
             {
