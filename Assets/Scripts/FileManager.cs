@@ -6,7 +6,7 @@ using System.IO;
 public class FileManager : MonoBehaviour
 {
     public static FileManager Inst = null;
-    public static CharacterStat PlayerJsonStat;
+    public static string PlayerJsonLead;
 
     private void Awake()
     {
@@ -19,9 +19,9 @@ public class FileManager : MonoBehaviour
         return File.ReadAllText(filePath);
     }
 
-    public static CharacterStat LoadJson(string filePath) // Json 파일 읽어오기
+    public static PlayerInfo LoadJson(string filePath) // PlayerInfo형식으로 Json 파일 읽어오기
     {
-        return JsonUtility.FromJson<CharacterStat>(filePath);
+        return JsonUtility.FromJson<PlayerInfo>(filePath);
     }
     public void SaveData(CharacterStat PlayerStat) // 플레이어 데이터 Json 저장
     {
@@ -32,15 +32,12 @@ public class FileManager : MonoBehaviour
 
     public void GetJsonPlayerData()
     {
-        // string filePath = ;
-        if (File.Exists(Application.dataPath + "/Player.Json")) // 파일이 존재 하면
+        string fileName = @"Player" + ".Json";
+        string filePath = Application.dataPath + "/" + fileName;
+        if (File.Exists(filePath)) // 파일이 존재 하면
         {
-            // LoadText(filePath);
-            // PlayerJsonStat = LoadJson(filePath);
-
-            string json = File.ReadAllText(Application.dataPath + "/Player.Json");
-            PlayerJsonStat = JsonUtility.FromJson<CharacterStat>(json);
-            Debug.Log(PlayerJsonStat.CurHP);
+            PlayerJsonLead = LoadText(filePath);
+            MyCharacter.Inst.playerInfo = LoadJson(PlayerJsonLead);
         }
     }
 }

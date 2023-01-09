@@ -61,7 +61,7 @@ public class Player : CharacterProperty, IBattle
     // Start is called before the first frame update
     void Start()
     {
-        
+        FileManager.Inst.GetJsonPlayerData();
     }
     private void FixedUpdate()
     {

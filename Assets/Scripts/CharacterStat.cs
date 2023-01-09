@@ -83,30 +83,36 @@ public struct CharacterStat
     public int Vigor
     {
         get => vigor;
+        set => vigor = value;
     }
     [SerializeField] int attunement; // 집중력(attackDelay 감소)
     public int Attunement
     {
         get => attunement;
+        set => attunement = value;
     }
     [SerializeField] int endurance; // 지구력(maxSP 상승)
     public int Endurance
     {
-        get => endurance;
+        get => endurance; 
+        set => endurance = value;
     }
 
     [SerializeField] int vitality; // 체력(HP, DG 둘다 상승)
     public int Vitality
     {
         get => vitality;
+        set => vitality = value;
     }
 
     [SerializeField] int strength; // 근력(attakDG 상승)
     public int Strength
     {
         get => strength;
+        set => strength = value;
     }
 
+    /*
     public CharacterStat(int Lv, int Souls, float hp, float sp, float attackDG, float moveSpeed, float rotSpeed, 
         float attackDelay, float spDelay, int vigor, int attunement, int endurance, int vitality, int strength)
     {
@@ -127,5 +133,5 @@ public struct CharacterStat
         this.vitality = vitality;
         this.strength = strength;
     }
-    
+    */
 }

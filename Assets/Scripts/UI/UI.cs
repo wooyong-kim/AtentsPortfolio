@@ -15,7 +15,7 @@ public class UI: MonoBehaviour
     public List<Transform> slots = new List<Transform>(); // ½½·Ôµé ¹è¿­
     public List<Transform> stats = new List<Transform>(); // ½½·Ôµé ¹è¿­
 
-    string[] statsText;
+    string[] statsText = new string[8];
 
     private void Awake()
     {
@@ -36,7 +36,6 @@ public class UI: MonoBehaviour
         {
             stats.Add(StatsSetting.transform.GetChild(i));
         }
-        FileManager.Inst.GetJsonPlayerData();
     }
 
     // Update is called once per frame
@@ -50,7 +49,7 @@ public class UI: MonoBehaviour
         if(Input.GetKeyDown(KeyCode.I))
         {
             inventoryActivated = !inventoryActivated;
-            //PlayerStats();
+            PlayerStats();
 
             if (inventoryActivated)
             {
@@ -100,7 +99,7 @@ public class UI: MonoBehaviour
             }
         }
     }
-
+    
     public void PlayerStats()
     {
         StartCoroutine(PlayerStatUI());
@@ -109,22 +108,24 @@ public class UI: MonoBehaviour
         {
             stats[i].GetComponent<StatUI>().TMP_Text.text = statsText[i];
         }
+
     }
 
     public IEnumerator PlayerStatUI()
     {
         while (true)
         {
-            statsText[0] = FileManager.PlayerJsonStat.LV.ToString();
-            statsText[1] = FileManager.PlayerJsonStat.Vigor.ToString();
-            statsText[2] = FileManager.PlayerJsonStat.Attunement.ToString();
-            statsText[3] = FileManager.PlayerJsonStat.Endurance.ToString();
-            statsText[4] = FileManager.PlayerJsonStat.Vitality.ToString();
-            statsText[5] = FileManager.PlayerJsonStat.Strength.ToString();
-            statsText[6] = FileManager.PlayerJsonStat.MaxHp.ToString();
-            statsText[7] = FileManager.PlayerJsonStat.MaxSP.ToString();
+            statsText[0] = MyCharacter.Inst.playerInfo.playerStat.LV.ToString();
+            statsText[1] = MyCharacter.Inst.playerInfo.playerStat.Vigor.ToString();
+            statsText[2] = MyCharacter.Inst.playerInfo.playerStat.Attunement.ToString();
+            statsText[3] = MyCharacter.Inst.playerInfo.playerStat.Endurance.ToString();
+            statsText[4] = MyCharacter.Inst.playerInfo.playerStat.Vitality.ToString();
+            statsText[5] = MyCharacter.Inst.playerInfo.playerStat.Strength.ToString();
+            statsText[6] = MyCharacter.Inst.playerInfo.playerStat.MaxHp.ToString();
+            statsText[7] = MyCharacter.Inst.playerInfo.playerStat.MaxSP.ToString();
 
             yield return null;
         }
     }
+    
 }

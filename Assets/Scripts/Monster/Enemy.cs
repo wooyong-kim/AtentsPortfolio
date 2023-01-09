@@ -140,8 +140,8 @@ public class Enemy : CharacterMovement, IBattle
     {
         Vector3 pos1 = PunchPosition.position + PunchPosition.up * -0.25f;
         Vector3 pos2 = PunchPosition.position + PunchPosition.up * 0.25f;
-        // Collider[] list = Physics.OverlapCapsule(pos1, pos2, 0.18f, TargetMask);
-        Collider[] list = Physics.OverlapSphere(PunchPosition.position, 2.0f, TargetMask);
+        Collider[] list = Physics.OverlapCapsule(pos1, pos2, 0.18f, TargetMask);
+        // Collider[] list = Physics.OverlapSphere(PunchPosition.position, 2.0f, TargetMask);
         foreach (Collider col in list)
         {
             IBattle ib = col.GetComponent<IBattle>();

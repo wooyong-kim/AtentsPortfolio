@@ -1,6 +1,7 @@
 {
-    "Lv": 1, // 생명력, 집중력, 지구력, 체력, 근력 합산 값
-    "Souls": 1000, // 레벨 상승 재료
+  "playerStat": {
+    "Lv": 5,
+    "Souls": 1000,
     "maxHp": 500.0,
     "curHP": 200.0,
     "maxSP": 100.0,
@@ -12,9 +13,10 @@
     "curAttackDelay": 0.0,
     "spDelay": 0.0,
     "curSpDelay": 0.0,
-    "Vigor": 1.0, // 생명력(maxHP 상승)
-    "Attunement": 1.0, // 집중력(attackDelay 감소)
-    "Endurance": 1.0, // 지구력(maxSP 상승)
-    "Vitality": 1.0, // 체력(HP, DG 둘다 상승)
-    "Strength": 1.0 // 근력(attakDG 상승)
+    "Vigor": 1,
+    "Attunement": 1,
+    "Endurance": 1,
+    "Vitality": 1,
+    "Strength": 1
+  }
 }
