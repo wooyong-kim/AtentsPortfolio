@@ -5,23 +5,31 @@ using System.IO;
 
 public class FileManager : MonoBehaviour
 {
-    public static FileManager Inst = null;
-    public static string PlayerJsonLead;
-
-    private void Awake()
+    static FileManager _inst = null;
+    public static FileManager Inst
     {
-        if (Inst != null) Destroy(gameObject);
-        Inst = this;
+        get
+        {
+            if (_inst == null)
+            {
+                _inst = (new GameObject("FileManager")).AddComponent<FileManager>();
+            }
+            return _inst;
+        }
     }
+
+    public static string PlayerJsonLead;
+    public CharacterStat chStat;
 
     public string LoadText(string filePath) // Text 파일 읽어오기
     {
         return File.ReadAllText(filePath);
     }
 
-    public static PlayerInfo LoadJson(string filePath) // PlayerInfo형식으로 Json 파일 읽어오기
+    public static CharacterStat LoadJson(string filePath) // Json 파일 읽어오기
     {
-        return JsonUtility.FromJson<PlayerInfo>(filePath);
+        CharacterStat stat = JsonUtility.FromJson<CharacterStat>(filePath);
+        return stat;
     }
     public void SaveData(CharacterStat PlayerStat) // 플레이어 데이터 Json 저장
     {
@@ -31,13 +39,13 @@ public class FileManager : MonoBehaviour
     }
 
     public void GetJsonPlayerData()
-    {
+    {     
         string fileName = @"Player" + ".Json";
         string filePath = Application.dataPath + "/" + fileName;
         if (File.Exists(filePath)) // 파일이 존재 하면
         {
             PlayerJsonLead = LoadText(filePath);
-            MyCharacter.Inst.playerInfo = LoadJson(PlayerJsonLead);
+            MyCharacter.Inst.playerInfo.playerStat = LoadJson(PlayerJsonLead);
         }
     }
 }

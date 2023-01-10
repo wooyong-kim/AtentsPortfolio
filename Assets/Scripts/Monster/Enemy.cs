@@ -1,5 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+
+using UnityEditor;
+
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -51,6 +54,16 @@ public class Enemy : CharacterMovement, IBattle
             return true;
         }
     }
+
+    private void OnDrawGizmos()
+    {
+        Vector3 pos1 = SwipingPosition.position + SwipingPosition.up * -0.5f * transform.localScale.y;
+        Vector3 pos2 = SwipingPosition.position + SwipingPosition.up * 0.5f * transform.localScale.y;
+
+        Gizmos.color = Color.red;
+        Gizmos.DrawSphere(pos1, 0.2f * transform.localScale.x);
+        Gizmos.DrawSphere(pos2, 0.2f * transform.localScale.x);
+    }
     void ChangeState(STATE s)
     {
         if (myState == s) return;
@@ -63,6 +76,9 @@ public class Enemy : CharacterMovement, IBattle
                 StopAllCoroutines();
                 myHpBar.gameObject.SetActive(false);
                 myAnim.SetBool("IsMoving", false);
+                Vector3 pos1 = SwipingPosition.position + SwipingPosition.up * -0.5f * transform.localScale.y;
+                Vector3 pos2 = SwipingPosition.position + SwipingPosition.up * 0.5f * transform.localScale.y;
+                Debug.DrawLine(pos1, pos2, Color.red);
                 break;
             case STATE.Battle:
                 StopAllCoroutines();
@@ -138,9 +154,9 @@ public class Enemy : CharacterMovement, IBattle
 
     void PunchAttack()
     {
-        Vector3 pos1 = PunchPosition.position + PunchPosition.up * -0.25f;
-        Vector3 pos2 = PunchPosition.position + PunchPosition.up * 0.25f;
-        Collider[] list = Physics.OverlapCapsule(pos1, pos2, 0.18f, TargetMask);
+        Vector3 pos1 = PunchPosition.position + PunchPosition.up * -0.25f * transform.localScale.y;
+        Vector3 pos2 = PunchPosition.position + PunchPosition.up * 0.25f * transform.localScale.y;
+        Collider[] list = Physics.OverlapCapsule(pos1, pos2, 0.18f * transform.localScale.x, TargetMask);
         // Collider[] list = Physics.OverlapSphere(PunchPosition.position, 2.0f, TargetMask);
         foreach (Collider col in list)
         {
@@ -151,10 +167,11 @@ public class Enemy : CharacterMovement, IBattle
 
     void SwipingAttack()
     {
-        Vector3 pos1 = SwipingPosition.position + SwipingPosition.up * -0.5f;
-        Vector3 pos2 = SwipingPosition.position + SwipingPosition.up * 0.5f;
-        // Collider[] list = Physics.OverlapCapsule(pos1, pos2, 0.2f, TargetMask);
-        Collider[] list = Physics.OverlapSphere(SwipingPosition.position, 2.0f, TargetMask);
+        Vector3 pos1 = SwipingPosition.position + SwipingPosition.up * -0.5f * transform.localScale.y;
+        Vector3 pos2 = SwipingPosition.position + SwipingPosition.up * 0.5f * transform.localScale.y;
+        Debug.DrawLine(pos1,pos2,Color.red);
+        Collider[] list = Physics.OverlapCapsule(pos1, pos2, 0.2f * transform.localScale.x, TargetMask);
+        // Collider[] list = Physics.OverlapSphere(SwipingPosition.position, 2.0f, TargetMask);
         foreach (Collider col in list)
         {
             IBattle ib = col.GetComponent<IBattle>();
@@ -165,10 +182,10 @@ public class Enemy : CharacterMovement, IBattle
 
     void RunAttack() // 범위 다시 지정해야 됨
     {
-        Vector3 pos1 = RunAttackPosition.position + RunAttackPosition.up * -0.5f;
-        Vector3 pos2 = RunAttackPosition.position + RunAttackPosition.up * 0.5f;
-        // Collider[] list = Physics.OverlapCapsule(pos1, pos2, 0.2f, TargetMask);
-        Collider[] list = Physics.OverlapSphere(RunAttackPosition.position, 2.0f, TargetMask);
+        Vector3 pos1 = RunAttackPosition.position + RunAttackPosition.up * -0.5f * transform.localScale.y;
+        Vector3 pos2 = RunAttackPosition.position + RunAttackPosition.up * 0.5f * transform.localScale.y;
+        Collider[] list = Physics.OverlapCapsule(pos1, pos2, 0.2f * transform.localScale.x, TargetMask);
+        // Collider[] list = Physics.OverlapSphere(RunAttackPosition.position, 2.0f, TargetMask);
         foreach (Collider col in list)
         {
             IBattle ib = col.GetComponent<IBattle>();

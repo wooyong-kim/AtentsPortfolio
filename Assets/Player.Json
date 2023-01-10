@@ -1,22 +1,20 @@
 {
-  "playerStat": {
     "Lv": 5,
-    "Souls": 1000,
-    "maxHp": 500.0,
+    "Souls": 500,
+    "maxHp": 200.0,
     "curHP": 200.0,
     "maxSP": 100.0,
     "curSP": 100.0,
-    "attackDG": 10.0,
+    "attackDG": 80.0,
     "moveSpeed": 2.0,
     "rotSpeed": 360.0,
     "attackDelay": 2.0,
     "curAttackDelay": 0.0,
     "spDelay": 0.0,
     "curSpDelay": 0.0,
-    "Vigor": 1,
-    "Attunement": 1,
-    "Endurance": 1,
-    "Vitality": 1,
-    "Strength": 1
-  }
+    "vigor": 1,
+    "attunement": 1,
+    "endurance": 1,
+    "vitality": 1,
+    "strength": 1
 }

@@ -4,24 +4,39 @@ using UnityEngine;
 
 public class MyCharacter : MonoBehaviour
 {
-    public static MyCharacter Inst = null;
-    public PlayerInfo playerInfo;
-
-    private void Awake()
+    static MyCharacter _inst = null;
+    public static MyCharacter Inst
     {
-        if (Inst != null) Destroy(gameObject);
-        Inst = this;
+        get
+        {
+            if(_inst == null)
+            {
+                _inst = (new GameObject("MyCharacter")).AddComponent<MyCharacter>();
+            }
+            return _inst;
+        }
+    }
+    public PlayerInfo playerInfo = new PlayerInfo();
+
+    public void LoadData()
+    {
+        FileManager.Inst.GetJsonPlayerData();  
+        StatLevelUp();
+        DefaultStats();
+        FileManager.Inst.SaveData(playerInfo.playerStat);
     }
 
-    void Start()
+    void DefaultStats()
     {
-        
+        playerInfo.playerStat.SoulS = 500;
+        playerInfo.playerStat.CurHP = playerInfo.playerStat.MaxHp;
+        playerInfo.playerStat.CurSP = playerInfo.playerStat.CurSP;
     }
 
     public void StatLevelUp()
     {
         playerInfo.playerStat.LV = playerInfo.playerStat.Vigor + playerInfo.playerStat.Attunement + playerInfo.playerStat.Endurance
-            + playerInfo.playerStat.Vitality + playerInfo.playerStat.Endurance + playerInfo.playerStat.Vitality + playerInfo.playerStat.Strength;
+            + playerInfo.playerStat.Vitality + playerInfo.playerStat.Strength;
         playerInfo.playerStat.MaxHp = 130 + playerInfo.playerStat.Vigor * 50 + playerInfo.playerStat.Vitality * 20;
         playerInfo.playerStat.MaxSP = 80 + playerInfo.playerStat.Endurance * 20;
         playerInfo.playerStat.AttackDG = 50 + playerInfo.playerStat.Vitality * 10 + playerInfo.playerStat.Strength * 20;

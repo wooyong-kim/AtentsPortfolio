@@ -16,6 +16,7 @@ public struct CharacterStat
     public int SoulS
     {
         get => Souls;
+        set => Souls = value;
     }
 
     //ÇÊµå ( Field )
@@ -111,27 +112,4 @@ public struct CharacterStat
         get => strength;
         set => strength = value;
     }
-
-    /*
-    public CharacterStat(int Lv, int Souls, float hp, float sp, float attackDG, float moveSpeed, float rotSpeed, 
-        float attackDelay, float spDelay, int vigor, int attunement, int endurance, int vitality, int strength)
-    {
-        this.Lv = Lv;
-        this.Souls = Souls;
-        curSP = maxSP = sp;
-        curHP = maxHp = hp;
-        this.attackDG = attackDG;
-        this.moveSpeed = moveSpeed;
-        this.rotSpeed = rotSpeed;
-        this.attackDelay = attackDelay;
-        curAttackDelay = 0.0f;
-        this.spDelay = spDelay;
-        curSpDelay = 0.0f;
-        this.vigor = vigor;
-        this.attunement = attunement;
-        this.endurance = endurance;
-        this.vitality = vitality;
-        this.strength = strength;
-    }
-    */
 }

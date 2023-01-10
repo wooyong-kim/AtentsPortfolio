@@ -61,7 +61,9 @@ public class Player : CharacterProperty, IBattle
     // Start is called before the first frame update
     void Start()
     {
-        FileManager.Inst.GetJsonPlayerData();
+        MyCharacter.Inst.LoadData();
+        myInfo = MyCharacter.Inst.playerInfo.playerStat;
+        // FileManager.Inst.SaveData(myInfo);
     }
     private void FixedUpdate()
     {
@@ -303,7 +305,7 @@ public class Player : CharacterProperty, IBattle
 
     public void OnAttack()
     {
-        Collider[] list = Physics.OverlapSphere(myHitPosition.position, 1.0f, EnemyMask);
+        Collider[] list = Physics.OverlapSphere(myHitPosition.position, 1.0f * transform.localScale.x, EnemyMask);
         foreach (Collider col in list)
         {
             IBattle ib = col.GetComponent<IBattle>();
@@ -313,7 +315,7 @@ public class Player : CharacterProperty, IBattle
 
     public void OnSkill()
     {
-        Collider[] list = Physics.OverlapSphere(transform.position, 2.0f, EnemyMask);
+        Collider[] list = Physics.OverlapSphere(transform.position, 2.0f * transform.localScale.x, EnemyMask);
         foreach (Collider col in list)
         {
             IBattle ib = col.GetComponent<IBattle>();
