@@ -121,27 +121,26 @@ public class Enemy : CharacterMovement, IBattle
             {
                 myInfo.curAttackDelay = 0.0f;
                 myAnim.SetTrigger("Attack");
-                int rand = Random.Range(0, 100);
-                // int rand = 60;
+                
                 if (rand >= 80)
                 {
                     myAnim.SetInteger("InputAttack", 0);
                     PunchAttack();
                 }
-                else if(80 > rand && rand >= 55)
+                else if(80 > rand && rand >= 50)
                 {
                     myAnim.SetInteger("InputAttack", 1);
-                    BreathAttack();
+                    SwipingAttack();                   
                 }
-                else if (55 > rand && rand >= 40)
+                else if (50 > rand && rand >= 30)
                 {
                     myAnim.SetInteger("InputAttack", 2);
-                    RunAttack();
+                    BreathAttack();
                 }
-                else if (40 > rand && rand >= 10)
+                else if (30 > rand && rand >= 20)
                 {
-                    myAnim.SetInteger("InputAttack", 3);
-                    SwipingAttack();
+                    myAnim.SetInteger("InputAttack", 3);  
+                    RunAttack();
                 }
                 else
                 {
@@ -157,7 +156,6 @@ public class Enemy : CharacterMovement, IBattle
         Vector3 pos1 = PunchPosition.position + PunchPosition.up * -0.25f * transform.localScale.y;
         Vector3 pos2 = PunchPosition.position + PunchPosition.up * 0.25f * transform.localScale.y;
         Collider[] list = Physics.OverlapCapsule(pos1, pos2, 0.18f * transform.localScale.x, TargetMask);
-        // Collider[] list = Physics.OverlapSphere(PunchPosition.position, 2.0f, TargetMask);
         foreach (Collider col in list)
         {
             IBattle ib = col.GetComponent<IBattle>();
@@ -171,7 +169,6 @@ public class Enemy : CharacterMovement, IBattle
         Vector3 pos2 = SwipingPosition.position + SwipingPosition.up * 0.5f * transform.localScale.y;
         Debug.DrawLine(pos1,pos2,Color.red);
         Collider[] list = Physics.OverlapCapsule(pos1, pos2, 0.2f * transform.localScale.x, TargetMask);
-        // Collider[] list = Physics.OverlapSphere(SwipingPosition.position, 2.0f, TargetMask);
         foreach (Collider col in list)
         {
             IBattle ib = col.GetComponent<IBattle>();
@@ -185,7 +182,6 @@ public class Enemy : CharacterMovement, IBattle
         Vector3 pos1 = RunAttackPosition.position + RunAttackPosition.up * -0.5f * transform.localScale.y;
         Vector3 pos2 = RunAttackPosition.position + RunAttackPosition.up * 0.5f * transform.localScale.y;
         Collider[] list = Physics.OverlapCapsule(pos1, pos2, 0.2f * transform.localScale.x, TargetMask);
-        // Collider[] list = Physics.OverlapSphere(RunAttackPosition.position, 2.0f, TargetMask);
         foreach (Collider col in list)
         {
             IBattle ib = col.GetComponent<IBattle>();

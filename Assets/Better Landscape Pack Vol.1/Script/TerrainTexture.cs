@@ -43,7 +43,7 @@ public class TerrainTexture : MonoBehaviour
         int nbTextures = terrainData.alphamapLayers;
 
         //See below for the definition of GetMaxHeight
-        float maxHeight = GetMaxHeight(terrainData, terrainData.heightmapWidth);
+        float maxHeight = GetMaxHeight(terrainData, terrainData.heightmapResolution);
 
         // Your texture data (i.e. Splatmap) is stored internally as a 3d array of floats with x and y location as the first 2 dimensions of the array and the index of the texture to be used as the 3rd dimension
         float[,,] splatmapData = new float[terrainData.alphamapWidth, terrainData.alphamapHeight, terrainData.alphamapLayers];
@@ -85,7 +85,7 @@ public class TerrainTexture : MonoBehaviour
                 float x_01 = (float)x / (float)terrainData.alphamapWidth;
 
                 // Sample the height at this location (note GetHeight expects int coordinates corresponding to locations in the heightmap array)
-                float height = terrainData.GetHeight(Mathf.RoundToInt(y_01 * terrainData.heightmapHeight), Mathf.RoundToInt(x_01 * terrainData.heightmapWidth));
+                float height = terrainData.GetHeight(Mathf.RoundToInt(y_01 * terrainData.heightmapResolution), Mathf.RoundToInt(x_01 * terrainData.heightmapResolution));
 
                 //Normalise the height by dividing it by maxHeight
                 float normHeight = height / maxHeight;

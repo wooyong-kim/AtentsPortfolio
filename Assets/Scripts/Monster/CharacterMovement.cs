@@ -41,6 +41,7 @@ public class CharacterMovement : MonoBehaviour
 
     Coroutine coMove = null;
     Coroutine coRot = null;
+    public int rand = 0;
 
     protected void FollowTarget(Transform target, Transform mypos, float MovSpeed, float RotSpeed = 360.0f, MyAction reached = null)
     {
@@ -51,33 +52,45 @@ public class CharacterMovement : MonoBehaviour
 
     IEnumerator FollowingTarget(Transform target, Transform mypos, float MovSpeed, float RotSpeed, MyAction reached)
     {
-        float AttackRange = 1.1f;
+        float AttackRange = 0.0f;
+
         while (target != null)
         {
-            //transform.LookAt(target.position);
+            rand = Random.Range(0, 100);
+            if (rand >= 30) // PunchAttack, SwipingAttack, BreathAttack
+            {
+                AttackRange = 3.0f;
+            }
+            else // RunAttack, JumpAttack
+            {
+                AttackRange = 6.0f;
+            }
+            AttackRange *= transform.localScale.x;
+
             Vector3 dir = target.position - mypos.position;
             dir.y = 0.0f;
-            float dist = dir.magnitude;
+            float dist = dir.magnitude;            
 
-            if (!myAnim.GetBool("IsAttacking") && dist > AttackRange + 5.5f)
+            if (!myAnim.GetBool("IsAttacking") && dist > AttackRange)
             {
-                Vector3 rot = Vector3.RotateTowards(mypos.forward, dir, RotSpeed * Mathf.Deg2Rad * Time.deltaTime, 0.0f);
-                mypos.rotation = Quaternion.LookRotation(rot);
-
                 myAnim.SetBool("IsMoving", true);
-                dir.Normalize();
-                float delta = MovSpeed * Time.deltaTime;
-                if (delta > dist - AttackRange)
+                while (dist - AttackRange > Mathf.Epsilon)
                 {
-                    delta = dist - AttackRange;
-                    myAnim.SetBool("IsMoving", false);
+                    dir = target.position - mypos.position;
+                    dir.y = 0.0f;
+                    dist = dir.magnitude;
+                    dir.Normalize();
+                    Vector3 rot = Vector3.RotateTowards(mypos.forward, dir, RotSpeed * Mathf.Deg2Rad * Time.deltaTime, 0.0f);
+                    mypos.rotation = Quaternion.LookRotation(rot);        
+                    yield return null;
                 }
-                // mypos.Translate(dir * delta, Space.World);
+                myAnim.SetBool("IsMoving", false);
             }
             else
             {
                 myAnim.SetBool("IsMoving", false);
                 reached?.Invoke();
+                new WaitForSeconds(1.0f);
             }
             yield return null;
         }
