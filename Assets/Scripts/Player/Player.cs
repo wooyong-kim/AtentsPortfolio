@@ -18,6 +18,7 @@ public class Player : CharacterProperty, IBattle
     public float moveSpeed = 10.0f;
     bool IsComboable = false;
     bool isMove = false;
+    bool hitMiss = false;
     int ClickCount = 0;
 
     float gravity = 2.5f; // 중력 변수
@@ -33,7 +34,7 @@ public class Player : CharacterProperty, IBattle
 
     public void OnDamage(float dmg)
     {
-        if (IsLive)
+        if (IsLive && !hitMiss)
         {
             myInfo.CurHP -= dmg;          
             if (Mathf.Approximately(myInfo.CurHP, 0.0f))
@@ -43,6 +44,7 @@ public class Player : CharacterProperty, IBattle
             else
             {
                 myAnim.SetTrigger("Damage");
+                StartCoroutine(MissTime(0.5f));
             }
         }
     }
@@ -295,6 +297,7 @@ public class Player : CharacterProperty, IBattle
                 if (Input.GetKeyDown(KeyCode.Space))
                 {
                     myAnim.SetTrigger("Roll");
+                    StartCoroutine(MissTime(0.5f));
                     myInfo.curSpDelay = 0.0f;
                     myInfo.CurSP -= 20.0f;
                 }
@@ -339,5 +342,12 @@ public class Player : CharacterProperty, IBattle
                 myAnim.SetTrigger("ComboStop");
             }
         }
+    }
+
+    IEnumerator MissTime(float misstime)
+    {
+        hitMiss = true;
+        yield return new WaitForSeconds(misstime);
+        hitMiss = false;
     }
 }

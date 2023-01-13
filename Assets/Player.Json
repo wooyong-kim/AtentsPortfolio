@@ -10,7 +10,7 @@
     "rotSpeed": 360.0,
     "attackDelay": 2.0,
     "curAttackDelay": 0.0,
-    "spDelay": 0.0,
+    "spDelay": 2.0,
     "curSpDelay": 0.0,
     "vigor": 1,
     "attunement": 1,

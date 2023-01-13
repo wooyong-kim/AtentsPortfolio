@@ -53,7 +53,6 @@ public class CharacterMovement : MonoBehaviour
     IEnumerator FollowingTarget(Transform target, Transform mypos, float MovSpeed, float RotSpeed, MyAction reached)
     {
         float AttackRange = 0.0f;
-
         while (target != null)
         {
             rand = Random.Range(0, 100);
@@ -69,7 +68,7 @@ public class CharacterMovement : MonoBehaviour
 
             Vector3 dir = target.position - mypos.position;
             dir.y = 0.0f;
-            float dist = dir.magnitude;            
+            float dist = dir.magnitude;
 
             if (!myAnim.GetBool("IsAttacking") && dist > AttackRange)
             {
@@ -81,7 +80,7 @@ public class CharacterMovement : MonoBehaviour
                     dist = dir.magnitude;
                     dir.Normalize();
                     Vector3 rot = Vector3.RotateTowards(mypos.forward, dir, RotSpeed * Mathf.Deg2Rad * Time.deltaTime, 0.0f);
-                    mypos.rotation = Quaternion.LookRotation(rot);        
+                    mypos.rotation = Quaternion.LookRotation(rot);
                     yield return null;
                 }
                 myAnim.SetBool("IsMoving", false);
@@ -90,7 +89,6 @@ public class CharacterMovement : MonoBehaviour
             {
                 myAnim.SetBool("IsMoving", false);
                 reached?.Invoke();
-                new WaitForSeconds(1.0f);
             }
             yield return null;
         }

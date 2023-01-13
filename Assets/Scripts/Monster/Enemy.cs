@@ -55,15 +55,6 @@ public class Enemy : CharacterMovement, IBattle
         }
     }
 
-    private void OnDrawGizmos()
-    {
-        Vector3 pos1 = SwipingPosition.position + SwipingPosition.up * -0.5f * transform.localScale.y;
-        Vector3 pos2 = SwipingPosition.position + SwipingPosition.up * 0.5f * transform.localScale.y;
-
-        Gizmos.color = Color.red;
-        Gizmos.DrawSphere(pos1, 0.2f * transform.localScale.x);
-        Gizmos.DrawSphere(pos2, 0.2f * transform.localScale.x);
-    }
     void ChangeState(STATE s)
     {
         if (myState == s) return;
@@ -115,38 +106,35 @@ public class Enemy : CharacterMovement, IBattle
 
     void OnAttack()
     {
-        if(!myAnim.GetBool("IsAttacking"))
+        if(!myAnim.GetBool("IsAttacking") && myInfo.curAttackDelay >= myInfo.AttackDelay)
         {
-            if(myInfo.curAttackDelay >= myInfo.AttackDelay)
-            {
-                myInfo.curAttackDelay = 0.0f;
-                myAnim.SetTrigger("Attack");
+            myInfo.curAttackDelay = 0.0f;
+            myAnim.SetTrigger("Attack");
                 
-                if (rand >= 80)
-                {
-                    myAnim.SetInteger("InputAttack", 0);
-                    PunchAttack();
-                }
-                else if(80 > rand && rand >= 50)
-                {
-                    myAnim.SetInteger("InputAttack", 1);
-                    SwipingAttack();                   
-                }
-                else if (50 > rand && rand >= 30)
-                {
-                    myAnim.SetInteger("InputAttack", 2);
-                    BreathAttack();
-                }
-                else if (30 > rand && rand >= 20)
-                {
-                    myAnim.SetInteger("InputAttack", 3);  
-                    RunAttack();
-                }
-                else
-                {
-                    myAnim.SetInteger("InputAttack", 4);
-                    JumpAttack();
-                }
+            if (rand >= 80)
+            {
+                myAnim.SetInteger("InputAttack", 0);
+                PunchAttack();
+            }
+            else if(80 > rand && rand >= 50)
+            {
+                myAnim.SetInteger("InputAttack", 1);
+                SwipingAttack();                   
+            }
+            else if (50 > rand && rand >= 30)
+            {
+                myAnim.SetInteger("InputAttack", 2);
+                BreathAttack();
+            }
+            else if (30 > rand && rand >= 20)
+            {
+                myAnim.SetInteger("InputAttack", 3);  
+                RunAttack();
+            }
+            else
+            {
+                myAnim.SetInteger("InputAttack", 4);
+                JumpAttack();
             }
         }
     }
@@ -177,7 +165,7 @@ public class Enemy : CharacterMovement, IBattle
         }
     }
 
-    void RunAttack() // 범위 다시 지정해야 됨
+    void RunAttack()
     {
         Vector3 pos1 = RunAttackPosition.position + RunAttackPosition.up * -0.5f * transform.localScale.y;
         Vector3 pos2 = RunAttackPosition.position + RunAttackPosition.up * 0.5f * transform.localScale.y;
@@ -196,7 +184,7 @@ public class Enemy : CharacterMovement, IBattle
         foreach (Collider col in list)
         {
             IBattle ib = col.GetComponent<IBattle>();
-            ib?.OnDamage(30.0f);
+            ib?.OnDamage(50.0f);
         }
     }
 
@@ -207,7 +195,7 @@ public class Enemy : CharacterMovement, IBattle
         if (BreathAngle <= angleRange * 0.5f && posDistance < distance)
         {
             IBattle ib = mySenser.myTarget.transform.GetComponent<IBattle>();
-            ib.OnDamage(50.0f);
+            ib.OnDamage(20.0f);
             // Debug.Log("Hit");
         }
     }
@@ -265,8 +253,6 @@ public class Enemy : CharacterMovement, IBattle
 
     private void FixedUpdate()
     {
-        // BreathRange();
-        // TrianglesMesh();
         myRigid.velocity = Vector3.zero;
     }
 }
