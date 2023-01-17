@@ -2,10 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RootMotion : MonoBehaviour
+public class RootMotion : CharacterMovement
 {
     Vector3 moveDelta = Vector3.zero;
-
     // Start is called before the first frame update
     void Start()
     {
@@ -24,7 +23,14 @@ public class RootMotion : MonoBehaviour
     }
     private void OnAnimatorMove()
     {
-        moveDelta += GetComponent<Animator>().deltaPosition;
-        transform.parent.Rotate(GetComponent<Animator>().deltaRotation.eulerAngles, Space.World);
+        if(AttackNum == 3)
+        {
+            moveDelta = Vector3.forward * 10.0f;
+        }
+        else
+        {
+            moveDelta += GetComponent<Animator>().deltaPosition;
+            transform.parent.Rotate(GetComponent<Animator>().deltaRotation.eulerAngles, Space.World);
+        }
     }
 }

@@ -23,12 +23,8 @@ public class Enemy : CharacterMovement, IBattle
     public STATE myState = STATE.Create;
     public AIPerception mySenser = null;
     public MeshFilter myFilter;
-    Vector3 StartPos = Vector3.zero;
 
-    float angleRange;
-    float distance;
-    float BreathAngle;
-    float posDistance;
+    
 
     public void OnDamage(float dmg)
     {
@@ -111,126 +107,29 @@ public class Enemy : CharacterMovement, IBattle
             myInfo.curAttackDelay = 0.0f;
             myAnim.SetTrigger("Attack");
                 
-            if (rand >= 80)
+            if (AttackNum == 0)
             {
-                myAnim.SetInteger("InputAttack", 0);
-                PunchAttack();
+                myAnim.SetInteger("InputAttack", 0); // PunchAttack
             }
-            else if(80 > rand && rand >= 50)
+            else if(AttackNum == 1)
             {
-                myAnim.SetInteger("InputAttack", 1);
-                SwipingAttack();                   
+                myAnim.SetInteger("InputAttack", 1); // SwipingAttack
             }
-            else if (50 > rand && rand >= 30)
+            else if (AttackNum == 2)
             {
-                myAnim.SetInteger("InputAttack", 2);
-                BreathAttack();
+                myAnim.SetInteger("InputAttack", 2); // BreathAttack              
             }
-            else if (30 > rand && rand >= 20)
+            else if (AttackNum == 3)
             {
-                myAnim.SetInteger("InputAttack", 3);  
-                RunAttack();
+                myAnim.SetInteger("InputAttack", 3); // RunAttack             
             }
             else
             {
-                myAnim.SetInteger("InputAttack", 4);
-                JumpAttack();
+                myAnim.SetInteger("InputAttack", 4); // JumpAttack
             }
         }
     }
-
-    void PunchAttack()
-    {
-        Vector3 pos1 = PunchPosition.position + PunchPosition.up * -0.25f * transform.localScale.y;
-        Vector3 pos2 = PunchPosition.position + PunchPosition.up * 0.25f * transform.localScale.y;
-        Collider[] list = Physics.OverlapCapsule(pos1, pos2, 0.18f * transform.localScale.x, TargetMask);
-        foreach (Collider col in list)
-        {
-            IBattle ib = col.GetComponent<IBattle>();
-            ib?.OnDamage(10.0f);
-        }
-    }
-
-    void SwipingAttack()
-    {
-        Vector3 pos1 = SwipingPosition.position + SwipingPosition.up * -0.5f * transform.localScale.y;
-        Vector3 pos2 = SwipingPosition.position + SwipingPosition.up * 0.5f * transform.localScale.y;
-        Debug.DrawLine(pos1,pos2,Color.red);
-        Collider[] list = Physics.OverlapCapsule(pos1, pos2, 0.2f * transform.localScale.x, TargetMask);
-        foreach (Collider col in list)
-        {
-            IBattle ib = col.GetComponent<IBattle>();
-            ib?.OnDamage(20.0f);
-
-        }
-    }
-
-    void RunAttack()
-    {
-        Vector3 pos1 = RunAttackPosition.position + RunAttackPosition.up * -0.5f * transform.localScale.y;
-        Vector3 pos2 = RunAttackPosition.position + RunAttackPosition.up * 0.5f * transform.localScale.y;
-        Collider[] list = Physics.OverlapCapsule(pos1, pos2, 0.2f * transform.localScale.x, TargetMask);
-        foreach (Collider col in list)
-        {
-            IBattle ib = col.GetComponent<IBattle>();
-            ib?.OnDamage(30.0f);
-
-        }
-    }
-
-    void JumpAttack()
-    {
-        Collider[] list = Physics.OverlapSphere(JumpAttackPosition.position, 2.0f, TargetMask);
-        foreach (Collider col in list)
-        {
-            IBattle ib = col.GetComponent<IBattle>();
-            ib?.OnDamage(50.0f);
-        }
-    }
-
-    void BreathAttack()
-    {
-        // Attack처럼 애니메이션 실행중 true, flase해서 fixupdata에서 onDamage 실행
-        // TrianglesMesh();
-        if (BreathAngle <= angleRange * 0.5f && posDistance < distance)
-        {
-            IBattle ib = mySenser.myTarget.transform.GetComponent<IBattle>();
-            ib.OnDamage(20.0f);
-            // Debug.Log("Hit");
-        }
-    }
-
-    void BreathRange()
-    {
-        // 범위 각도 만큼 RaycasHit를 쏴서 히트되면 데미지 굳이? 범위 값 구해서 범위 안에 있으면 데미지 주면 가능인데
-        angleRange = 30.0f;
-        distance = 2.0f;
-        Vector3 playerPos = mySenser.myTarget.transform.position;
-        playerPos.y = myHeadPos.transform.position.y;
-        BreathAngle = Vector3.Angle(transform.forward, (playerPos - myHeadPos.transform.position).normalized);
-        // HeadPos가 바라보는 방향 벡터 값 HeadPos에서 Player의 방향 벡터 값의 각도
-        posDistance = Vector3.Distance(playerPos, myHeadPos.position);
-        // Debug.Log("BreathAngle " + BreathAngle);
-    }
-
-    void TrianglesMesh()
-    {
-        float angleRange = 30.0f;
-        float distance = 2.0f;
-        Vector3[] myDirs = new Vector3[3];
-        Vector3 dir = Vector3.forward * distance;
-        myDirs[0] = myHeadPos.localPosition;
-        myDirs[1] = myHeadPos.localPosition + Quaternion.AngleAxis(-angleRange / 2.0f, Vector3.up) * dir;
-        myDirs[2] = myHeadPos.localPosition + Quaternion.AngleAxis(angleRange / 2.0f, Vector3.up) * dir;
-
-        int[] triangles = new int[] { 0, 1, 2 };
-
-        Mesh _mesh = new Mesh();
-        _mesh.vertices = myDirs;
-        _mesh.triangles = triangles;
-        myFilter.mesh = _mesh;
-    }
-
+    
     bool Changerable()
     {
         return myState != STATE.Death;

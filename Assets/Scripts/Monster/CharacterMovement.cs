@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+using static UnityEditor.PlayerSettings;
+
 public delegate void MyAction();
 public delegate void MyAction<T>(T t);
 
@@ -42,6 +44,7 @@ public class CharacterMovement : MonoBehaviour
     Coroutine coMove = null;
     Coroutine coRot = null;
     public int rand = 0;
+    public int AttackNum = 0;
 
     protected void FollowTarget(Transform target, Transform mypos, float MovSpeed, float RotSpeed = 360.0f, MyAction reached = null)
     {
@@ -50,13 +53,43 @@ public class CharacterMovement : MonoBehaviour
         if (coRot != null) StopCoroutine(coRot);
     }
 
+    void LookTaget(Transform mypos, Vector3 dir, float RotSpeed)
+    {
+        Vector3 rot = Vector3.RotateTowards(mypos.forward, dir, RotSpeed * Mathf.Deg2Rad * Time.deltaTime, 0.0f);
+        mypos.rotation = Quaternion.LookRotation(rot);
+    }
+
     IEnumerator FollowingTarget(Transform target, Transform mypos, float MovSpeed, float RotSpeed, MyAction reached)
     {
         float AttackRange = 0.0f;
         while (target != null)
         {
             rand = Random.Range(0, 100);
-            if (rand >= 30) // PunchAttack, SwipingAttack, BreathAttack
+            if (rand >= 80)
+            {
+                AttackNum = 0; // PunchAttack
+            }
+            else if (80 > rand && rand >= 50)
+            {
+                AttackNum = 1; // SwipingAttack
+            }
+            else if (50 > rand && rand >= 30)
+            {
+                AttackNum = 2; // BreathAttack
+            }
+            else if (30 > rand && rand >= 20)
+            {
+                AttackNum = 3; // RunAttack
+            }
+            else
+            {
+                AttackNum = 4; // JumpAttack
+            }
+
+            // 테스트를 위해 강제 할당
+            AttackNum = 3;
+
+            if (AttackNum <= 2) // PunchAttack, SwipingAttack, BreathAttack
             {
                 AttackRange = 3.0f;
             }
@@ -79,14 +112,17 @@ public class CharacterMovement : MonoBehaviour
                     dir.y = 0.0f;
                     dist = dir.magnitude;
                     dir.Normalize();
-                    Vector3 rot = Vector3.RotateTowards(mypos.forward, dir, RotSpeed * Mathf.Deg2Rad * Time.deltaTime, 0.0f);
-                    mypos.rotation = Quaternion.LookRotation(rot);
+                    LookTaget(mypos, dir, RotSpeed);
                     yield return null;
                 }
                 myAnim.SetBool("IsMoving", false);
             }
             else
             {
+                if(!myAnim.GetBool("IsAttacking"))
+                {
+                    LookTaget(mypos, dir, RotSpeed);
+                }
                 myAnim.SetBool("IsMoving", false);
                 reached?.Invoke();
             }

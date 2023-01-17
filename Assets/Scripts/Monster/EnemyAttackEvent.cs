@@ -10,23 +10,23 @@ public class EnemyAttackEvent : CharacterMovement
         {
             IBattle ib = other.gameObject.GetComponent<IBattle>();
 
-            if (rand >= 80)
+            if (AttackNum == 0)
             {
                 ib?.OnDamage(10.0f); // PunchAttack
             }
-            else if (80 > rand && rand >= 50)
+            else if (AttackNum == 1)
             {
                 ib?.OnDamage(20.0f); // SwipingAttack
             }
-            else if (50 > rand && rand >= 30)
+            else if (AttackNum == 2)
             {
-                ib?.OnDamage(20.0f); // BreathAttack
+                // BreathAttack
             }
-            else if (30 > rand && rand >= 20)
+            else if (AttackNum == 3)
             {
                 ib?.OnDamage(30.0f); // RunAttack
             }
-            else
+            else // AttackNum = 4;
             {
                 ib?.OnDamage(50.0f); // JumpAttack
             }
