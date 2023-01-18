@@ -43,8 +43,19 @@ public class CharacterMovement : MonoBehaviour
 
     Coroutine coMove = null;
     Coroutine coRot = null;
-    public int rand = 0;
-    public int AttackNum = 0;
+    public int rand;
+    int _attacknum = 0;
+    public int AttackNum
+    {
+        get => _attacknum;
+        set => _attacknum = value;
+    }
+    int _attacknumroot = 5;
+    public int AttackNumRoot
+    {
+        get => _attacknumroot;
+        set => _attacknumroot = value;
+    }
 
     protected void FollowTarget(Transform target, Transform mypos, float MovSpeed, float RotSpeed = 360.0f, MyAction reached = null)
     {
@@ -64,40 +75,43 @@ public class CharacterMovement : MonoBehaviour
         float AttackRange = 0.0f;
         while (target != null)
         {
-            rand = Random.Range(0, 100);
-            if (rand >= 80)
-            {
-                AttackNum = 0; // PunchAttack
-            }
-            else if (80 > rand && rand >= 50)
-            {
-                AttackNum = 1; // SwipingAttack
-            }
-            else if (50 > rand && rand >= 30)
-            {
-                AttackNum = 2; // BreathAttack
-            }
-            else if (30 > rand && rand >= 20)
-            {
-                AttackNum = 3; // RunAttack
-            }
-            else
-            {
-                AttackNum = 4; // JumpAttack
-            }
+            AttackNumRoot = myAnim.GetInteger("AttackNum");
 
-            // 테스트를 위해 강제 할당
-            AttackNum = 3;
+            if (!myAnim.GetBool("IsAttacking"))
+            {
+                rand = Random.Range(0, 100);
 
-            if (AttackNum <= 2) // PunchAttack, SwipingAttack, BreathAttack
-            {
-                AttackRange = 3.0f;
+                if (rand >= 80)
+                {
+                    AttackNum = 0; // PunchAttack
+                }
+                else if (80 > rand && rand >= 50)
+                {
+                    AttackNum = 1; // SwipingAttack
+                }
+                else if (50 > rand && rand >= 30)
+                {
+                    AttackNum = 2; // BreathAttack
+                }
+                else if (30 > rand && rand >= 20)
+                {
+                    AttackNum = 3; // RunAttack
+                }
+                else
+                {
+                    AttackNum = 4; // JumpAttack
+                }
+
+                if (AttackNum <= 2) // PunchAttack, SwipingAttack, BreathAttack
+                {
+                    AttackRange = 3.0f;
+                }
+                else // RunAttack, JumpAttack
+                {
+                    AttackRange = 100.0f;
+                }
+                AttackRange *= transform.localScale.x;
             }
-            else // RunAttack, JumpAttack
-            {
-                AttackRange = 6.0f;
-            }
-            AttackRange *= transform.localScale.x;
 
             Vector3 dir = target.position - mypos.position;
             dir.y = 0.0f;

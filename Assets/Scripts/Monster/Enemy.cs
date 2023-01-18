@@ -24,8 +24,6 @@ public class Enemy : CharacterMovement, IBattle
     public AIPerception mySenser = null;
     public MeshFilter myFilter;
 
-    
-
     public void OnDamage(float dmg)
     {
         myInfo.CurHP -= dmg;
@@ -69,7 +67,7 @@ public class Enemy : CharacterMovement, IBattle
                 break;
             case STATE.Battle:
                 StopAllCoroutines();
-                myHpBar.gameObject.SetActive(true);
+                myHpBar.gameObject.SetActive(true);               
                 FollowTarget(mySenser.myTarget.transform, transform, myInfo.MoveSpeed, myInfo.RotSpeed, OnAttack);
                 break;
             case STATE.Death:
