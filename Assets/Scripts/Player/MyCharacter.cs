@@ -17,6 +17,7 @@ public class MyCharacter : MonoBehaviour
         }
     }
     public PlayerInfo playerInfo = new PlayerInfo();
+    public PlayerInfo enemyInfo = new PlayerInfo();
 
     public void LoadData()
     {
@@ -25,6 +26,17 @@ public class MyCharacter : MonoBehaviour
         DefaultStats();
         FileManager.Inst.SaveData(playerInfo.playerStat);
     }
+
+    public void LoadEnemyEasyData()
+    {
+        FileManager.Inst.GetJsonEnemyEasyData();
+    }
+
+    public void LoadEnemyHardData()
+    {
+        FileManager.Inst.GetJsonEnemyHardData();
+    }
+
 
     void DefaultStats()
     {

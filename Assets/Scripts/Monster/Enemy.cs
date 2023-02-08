@@ -1,10 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
-
 using UnityEditor;
-
 using UnityEngine;
 using UnityEngine.UI;
+using System.IO;
 
 public class Enemy : CharacterMovement, IBattle
 {
@@ -16,6 +15,26 @@ public class Enemy : CharacterMovement, IBattle
     public Transform JumpAttackPosition;
     public Transform myHeadPos;
     public Slider myHpBar;
+    public static string SettingJsonLead;
+    SettingData set;
+
+    private void OnEnable()
+    {
+        string fileName = @"Settings" + ".Json";
+        string filePath = Application.dataPath + "/" + fileName;
+        if (File.Exists(filePath)) // 파일이 존재 하면
+        {
+            SettingJsonLead = File.ReadAllText(filePath);
+            set = JsonUtility.FromJson<SettingData>(SettingJsonLead);
+        }  
+    }
+
+    public enum DIFFCULTY
+    {
+        Easy, Hard
+    }
+    public DIFFCULTY diff = DIFFCULTY.Easy;
+
     public enum STATE
     {
         Create, Normal, Battle, Death
@@ -136,6 +155,17 @@ public class Enemy : CharacterMovement, IBattle
     // Start is called before the first frame update
     void Start()
     {
+        if(set.diffculty == 0) // Easy 난이도 선택시
+        {
+            MyCharacter.Inst.LoadEnemyEasyData(); // EnemyEasy.Json 파일을 읽어옴
+            myInfo = MyCharacter.Inst.enemyInfo.playerStat;
+        }
+        else if(set.diffculty == 1) // Hard 난이도 선택시
+        {
+            MyCharacter.Inst.LoadEnemyHardData(); // EnemyHard.Json 파일을 읽어옴
+            myInfo = MyCharacter.Inst.enemyInfo.playerStat;
+        }
+
         mySenser.FindTarget += () => { if (Changerable()) ChangeState(STATE.Battle); };
         mySenser.LostTarget += () => { if (Changerable()) ChangeState(STATE.Normal); };
 
@@ -145,7 +175,7 @@ public class Enemy : CharacterMovement, IBattle
     // Update is called once per frame
     void Update()
     {
-        StateProcess();  
+        StateProcess();
     }
 
     private void FixedUpdate()

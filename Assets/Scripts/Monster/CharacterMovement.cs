@@ -79,8 +79,8 @@ public class CharacterMovement : MonoBehaviour
 
             if (!myAnim.GetBool("IsAttacking"))
             {
-                rand = Random.Range(0, 100);
-
+                // rand = Random.Range(0, 100);
+                rand = 25;
                 if (rand >= 80)
                 {
                     AttackNum = 0; // PunchAttack

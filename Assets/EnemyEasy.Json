@@ -1,0 +1,20 @@
+{
+    "Lv": 5,
+    "Souls": 500,
+    "maxHp": 200.0,
+    "curHP": 200.0,
+    "maxSP": 0.0,
+    "curSP": 0.0,
+    "attackDG": 0.0,
+    "moveSpeed": 1.0,
+    "rotSpeed": 360.0,
+    "attackDelay": 2.0,
+    "curAttackDelay": 0.0,
+    "spDelay": 0.0,
+    "curSpDelay": 0.0,
+    "vigor": 0,
+    "attunement": 0,
+    "endurance": 0,
+    "vitality": 0,
+    "strength": 0
+}
