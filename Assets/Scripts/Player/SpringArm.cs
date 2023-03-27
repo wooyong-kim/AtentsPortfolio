@@ -8,7 +8,7 @@ public class SpringArm : MonoBehaviour
     public LayerMask CrashMask;
     public LayerMask CrashMask2;
     public Transform myCam = null;
-    public float rotSpeed = 5.0f;
+    public float rotSpeed = 3.0f;
     public float zoomSpeed = 5.0f;
     public Vector2 RotateRange = new Vector2(-70, 80); // Clamp
     // Vector3 curRot = Vector3.zero;
@@ -32,7 +32,7 @@ public class SpringArm : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(!UI.inventoryActivated)
+        if(!UI.inventoryActivatedInven && !UI.inventoryActivatedOption && !UI.levelActivate)
         {
             desireRot.x += -Input.GetAxisRaw("Mouse Y") * rotSpeed;
             desireRot.x = Mathf.Clamp(desireRot.x, RotateRange.x, RotateRange.y);

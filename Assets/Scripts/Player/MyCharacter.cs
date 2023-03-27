@@ -19,6 +19,14 @@ public class MyCharacter : MonoBehaviour
     public PlayerInfo playerInfo = new PlayerInfo();
     public PlayerInfo enemyInfo = new PlayerInfo();
 
+    public void NewData()
+    {
+        FileManager.Inst.GetJsonPlayerDefaultData();
+        StatLevelUp();
+        DefaultStats();
+        FileManager.Inst.SaveData(playerInfo.playerStat);
+    }
+
     public void LoadData()
     {
         FileManager.Inst.GetJsonPlayerData();  
@@ -37,21 +45,18 @@ public class MyCharacter : MonoBehaviour
         FileManager.Inst.GetJsonEnemyHardData();
     }
 
-
     void DefaultStats()
     {
-        playerInfo.playerStat.SoulS = 500;
         playerInfo.playerStat.CurHP = playerInfo.playerStat.MaxHp;
         playerInfo.playerStat.CurSP = playerInfo.playerStat.CurSP;
     }
-
     public void StatLevelUp()
     {
         playerInfo.playerStat.LV = playerInfo.playerStat.Vigor + playerInfo.playerStat.Attunement + playerInfo.playerStat.Endurance
             + playerInfo.playerStat.Vitality + playerInfo.playerStat.Strength;
         playerInfo.playerStat.MaxHp = 130 + playerInfo.playerStat.Vigor * 50 + playerInfo.playerStat.Vitality * 20;
         playerInfo.playerStat.MaxSP = 80 + playerInfo.playerStat.Endurance * 20;
-        playerInfo.playerStat.AttackDG = 50 + playerInfo.playerStat.Vitality * 10 + playerInfo.playerStat.Strength * 20;
+        playerInfo.playerStat.AttackDG = playerInfo.playerStat.Vitality * 10 + playerInfo.playerStat.Strength * 20;
         playerInfo.playerStat.AttackDelay = 2.0f - playerInfo.playerStat.Attunement / 100;
     }
 }

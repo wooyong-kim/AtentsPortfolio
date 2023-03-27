@@ -139630,6 +139630,13 @@ AnimationClip:
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
+  - time: 0.5
+    functionName: OnAttackSound
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
   - time: 0.73333335
     functionName: OnAttack
     data: 
@@ -139639,6 +139646,13 @@ AnimationClip:
     messageOptions: 0
   - time: 1
     functionName: OnComboCheckEnd
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
+  - time: 1
+    functionName: OnComboAttackSound
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
@@ -139660,6 +139674,13 @@ AnimationClip:
     messageOptions: 0
   - time: 1.4
     functionName: OnComboCheckEnd
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
+  - time: 2.2666667
+    functionName: OnComboAttackSound
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0

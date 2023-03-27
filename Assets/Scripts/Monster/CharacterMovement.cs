@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
 using static UnityEditor.PlayerSettings;
 
 public delegate void MyAction();
@@ -50,12 +49,6 @@ public class CharacterMovement : MonoBehaviour
         get => _attacknum;
         set => _attacknum = value;
     }
-    int _attacknumroot = 5;
-    public int AttackNumRoot
-    {
-        get => _attacknumroot;
-        set => _attacknumroot = value;
-    }
 
     protected void FollowTarget(Transform target, Transform mypos, float MovSpeed, float RotSpeed = 360.0f, MyAction reached = null)
     {
@@ -75,42 +68,34 @@ public class CharacterMovement : MonoBehaviour
         float AttackRange = 0.0f;
         while (target != null)
         {
-            AttackNumRoot = myAnim.GetInteger("AttackNum");
-
             if (!myAnim.GetBool("IsAttacking"))
             {
-                // rand = Random.Range(0, 100);
-                rand = 25;
-                if (rand >= 80)
+                rand = Random.Range(0, 100);
+                if (rand >= 70)
                 {
                     AttackNum = 0; // PunchAttack
                 }
-                else if (80 > rand && rand >= 50)
+                else if (70 > rand && rand >= 40)
                 {
                     AttackNum = 1; // SwipingAttack
                 }
-                else if (50 > rand && rand >= 30)
+                else if (40 > rand && rand >= 20)
                 {
                     AttackNum = 2; // BreathAttack
                 }
-                else if (30 > rand && rand >= 20)
-                {
-                    AttackNum = 3; // RunAttack
-                }
                 else
                 {
-                    AttackNum = 4; // JumpAttack
+                    AttackNum = 3; // JumpAttack
                 }
 
                 if (AttackNum <= 2) // PunchAttack, SwipingAttack, BreathAttack
                 {
                     AttackRange = 3.0f;
                 }
-                else // RunAttack, JumpAttack
+                else // JumpAttack
                 {
-                    AttackRange = 100.0f;
+                    AttackRange = 10.0f;
                 }
-                AttackRange *= transform.localScale.x;
             }
 
             Vector3 dir = target.position - mypos.position;

@@ -6,17 +6,6 @@ public class RootMotion : MonoBehaviour
 {
     Vector3 moveDelta = Vector3.zero;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
     private void FixedUpdate()
     {
         transform.parent.Translate(moveDelta, Space.World);
@@ -27,5 +16,4 @@ public class RootMotion : MonoBehaviour
         moveDelta += GetComponent<Animator>().deltaPosition;
         transform.parent.Rotate(GetComponent<Animator>().deltaRotation.eulerAngles, Space.World);
     }
-
 }

@@ -6,7 +6,6 @@ public class ButtonExit : MonoBehaviour
 {
     public void OnClickExit()
     {
-        Debug.Log("Quit");
         Application.Quit();
     }
 }

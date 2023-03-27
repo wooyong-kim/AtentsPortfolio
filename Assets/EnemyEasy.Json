@@ -5,7 +5,7 @@
     "curHP": 200.0,
     "maxSP": 0.0,
     "curSP": 0.0,
-    "attackDG": 0.0,
+    "attackDG": 1.0,
     "moveSpeed": 1.0,
     "rotSpeed": 360.0,
     "attackDelay": 2.0,

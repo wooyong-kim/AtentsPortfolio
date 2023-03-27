@@ -20,7 +20,7 @@ public class FileManager : MonoBehaviour
 
     public static string PlayerJsonLead;
     public static string EnemyJsonLead;
-    public CharacterStat chStat;
+    public bool StatChange = true;
 
     public string LoadText(string filePath) // Text 파일 읽어오기
     {
@@ -42,6 +42,17 @@ public class FileManager : MonoBehaviour
     public void GetJsonPlayerData()
     {     
         string fileName = @"Player" + ".Json";
+        string filePath = Application.dataPath + "/" + fileName;
+        if (File.Exists(filePath)) // 파일이 존재 하면
+        {
+            PlayerJsonLead = LoadText(filePath);
+            MyCharacter.Inst.playerInfo.playerStat = LoadJson(PlayerJsonLead);
+        }
+    }
+
+    public void GetJsonPlayerDefaultData()
+    {
+        string fileName = @"PlayerDefault" + ".Json";
         string filePath = Application.dataPath + "/" + fileName;
         if (File.Exists(filePath)) // 파일이 존재 하면
         {

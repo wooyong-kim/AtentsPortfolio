@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -19,6 +20,7 @@ public class Player : CharacterProperty, IBattle
     bool IsComboable = false;
     bool isMove = false;
     bool hitMiss = false;
+    bool shield = false;
     int ClickCount = 0;
 
     float gravity = 2.5f; // 중력 변수
@@ -32,14 +34,30 @@ public class Player : CharacterProperty, IBattle
     public Transform nextFrameRaycast;
     public Transform groundCheck;
 
+    public GameObject death;
+    public AudioClip[] playerSound;
+
     public void OnDamage(float dmg)
     {
         if (IsLive && !hitMiss)
         {
-            myInfo.CurHP -= dmg;          
+            if (shield && myInfo.CurSP >= dmg)
+            {
+                myInfo.CurHP -= dmg * 0.5f;
+                myInfo.CurSP -= dmg;
+                myInfo.curSpDelay = 0.0f;
+                myEgBar.value = myInfo.CurSP / myInfo.MaxSP;
+                PlayerSpeeker.PlayOneShot(playerSound[0]);
+            }
+            else
+            {
+                myInfo.CurHP -= dmg;
+            }
             if (Mathf.Approximately(myInfo.CurHP, 0.0f))
             {
+                myHpBar.value = 0;
                 myAnim.SetTrigger("Death");
+                Death();
             }
             else
             {
@@ -60,17 +78,34 @@ public class Player : CharacterProperty, IBattle
         }
     }
 
+    public AudioSource _speaker = null;
+    public AudioSource PlayerSpeeker
+    {
+        get
+        {
+            if (_speaker == null)
+            {
+                _speaker = GetComponent<AudioSource>();
+            }
+            return _speaker;
+        }
+    }
+
     // Start is called before the first frame update
     void Start()
     {
-        MyCharacter.Inst.LoadData();
+        death.SetActive(false);
+        if (GameObject.Find("SettingJson").GetComponent<SettingJson>().set.Save == 0)
+        {
+            MyCharacter.Inst.NewData();
+        }
+        else if (GameObject.Find("SettingJson").GetComponent<SettingJson>().set.Save == 1)
+        {
+            MyCharacter.Inst.LoadData();
+        }
         myInfo = MyCharacter.Inst.playerInfo.playerStat;
-        // FileManager.Inst.SaveData(myInfo);
     }
-    private void FixedUpdate()
-    {
-        //myRigid.velocity = Vector3.zero; // 질량 관성 무시
-    }
+
     Vector3 AdjustDirectionToSlope(Vector3 direction)
     {
         return Vector3.ProjectOnPlane(direction, slopHit.normal).normalized;
@@ -89,7 +124,7 @@ public class Player : CharacterProperty, IBattle
     // Update is called once per frame
     void Update()
     {
-        if (IsLive && !UI.inventoryActivated)
+        if (IsLive && !UI.inventoryActivatedInven && !UI.inventoryActivatedOption && !UI.levelActivate)
         {
             Move();
             Gravity(); // 중력
@@ -97,12 +132,20 @@ public class Player : CharacterProperty, IBattle
             Shield();
             Sit();
             Roll();
-            myInfo.curSpDelay += Time.deltaTime;
             myHpBar.value = myInfo.CurHP / myInfo.MaxHp;
+            myInfo.curSpDelay += Time.deltaTime;  
             if (myInfo.curSpDelay >= myInfo.SpDelay)
             {
                 myInfo.CurSP += 10.0f * Time.deltaTime;
             }
+        }
+
+        if(FileManager.Inst.StatChange) // LEVEL UP
+        {
+            myInfo = MyCharacter.Inst.playerInfo.playerStat;
+            myInfo.CurHP = myInfo.MaxHp;
+            myInfo.CurSP = myInfo.MaxSP;
+            FileManager.Inst.StatChange = false;
         }
     }
 
@@ -163,27 +206,6 @@ public class Player : CharacterProperty, IBattle
         }
     }
 
-
-    bool PlayerStairs(Vector3 dir)
-    {
-        if (Physics.Raycast(myFoot.position, dir, 0.33f, LayerMask.GetMask("Wall"))
-            || Physics.Raycast(myKnee.position, dir, 0.33f, LayerMask.GetMask("Wall")))
-        {
-            return true;
-        }
-        return false;
-    }
-
-    bool StairsCrash()
-    {
-        if (PlayerStairs(transform.right) || PlayerStairs(transform.forward) 
-            || PlayerStairs(-transform.right) || PlayerStairs(-transform.forward))
-        {
-            return true;
-        }
-        return false;
-    }
-
     bool PlayerWall(Vector3 dir)
     {
         return Physics.Raycast(transform.position, dir, 0.33f, LayerMask.GetMask("Wall"));
@@ -228,6 +250,12 @@ public class Player : CharacterProperty, IBattle
         transform.rotation = myAnim.rootRotation;
     }
 
+    void Death()
+    {
+        FileManager.Inst.SaveData(MyCharacter.Inst.playerInfo.playerStat); // Player.Json에 데이터 저장
+        death.SetActive(true);
+    }
+
     void Attack()
     {
         if(!(myInfo.CurSP < 15.0f))
@@ -248,7 +276,6 @@ public class Player : CharacterProperty, IBattle
                 {
                     ClickCount++;
                     myInfo.curSpDelay = 0.0f;
-                    myInfo.CurSP -= 15.0f;
                 }
             }
             myEgBar.value = myInfo.CurSP / myInfo.MaxSP;
@@ -262,10 +289,12 @@ public class Player : CharacterProperty, IBattle
             if(Input.GetMouseButton(1))
             {
                 myAnim.SetBool("Shield", true);
+                shield = true;
             }
             else
             {
                 myAnim.SetBool("Shield", false);
+                shield = false;
             }
         }
     }
@@ -312,17 +341,7 @@ public class Player : CharacterProperty, IBattle
         foreach (Collider col in list)
         {
             IBattle ib = col.GetComponent<IBattle>();
-            ib?.OnDamage(35.0f);
-        }
-    }
-
-    public void OnSkill()
-    {
-        Collider[] list = Physics.OverlapSphere(transform.position, 2.0f * transform.localScale.x, EnemyMask);
-        foreach (Collider col in list)
-        {
-            IBattle ib = col.GetComponent<IBattle>();
-            ib?.OnDamage(50.0f);
+            ib?.OnDamage(MyCharacter.Inst.playerInfo.playerStat.AttackDG);
         }
     }
 
@@ -337,11 +356,24 @@ public class Player : CharacterProperty, IBattle
         else
         {
             //ComboCheckEnd
-            if (ClickCount != 1)
+            if (ClickCount == 0)
             {
                 myAnim.SetTrigger("ComboStop");
             }
         }
+    }
+
+    public void OnAttackSound()
+    {
+        PlayerSpeeker.PlayOneShot(playerSound[1]);
+    }
+
+    public void OnComboAttackSound()
+    {
+        if(ClickCount > 0)
+        {
+            PlayerSpeeker.PlayOneShot(playerSound[1]);
+        }     
     }
 
     IEnumerator MissTime(float misstime)

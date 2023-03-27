@@ -6,6 +6,7 @@ using UnityEngine;
 public class TriggerScript : MonoBehaviour
 {
     public ParticleSystem PS;
+    public Enemy enemy;
     public void BreathAttack()
     {
         if (gameObject != null)
@@ -20,13 +21,13 @@ public class TriggerScript : MonoBehaviour
 
     void OnParticleTrigger()
     {
-        List<ParticleSystem.Particle> Enter = new List<ParticleSystem.Particle>();
-        int numEnter = PS.GetTriggerParticles(ParticleSystemTriggerEventType.Enter, Enter);
+        List<ParticleSystem.Particle> Enter = new List<ParticleSystem.Particle>(); // particles
+        int numEnter = PS.GetTriggerParticles(ParticleSystemTriggerEventType.Enter, Enter); // get Trigger Event list
 
         for(int i = 0; i < numEnter; ++i)
         {
             IBattle ib = PS.trigger.GetCollider(0).GetComponent<IBattle>();
-            ib?.OnDamage(10.0f);
+            ib?.OnDamage(15.0f * enemy.myInfo.AttackDG);
         }
     }
 }

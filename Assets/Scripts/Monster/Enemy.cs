@@ -11,29 +11,11 @@ public class Enemy : CharacterMovement, IBattle
     public LayerMask TargetMask = default;
     public Transform PunchPosition;
     public Transform SwipingPosition;
-    public Transform RunAttackPosition;
     public Transform JumpAttackPosition;
     public Transform myHeadPos;
     public Slider myHpBar;
-    public static string SettingJsonLead;
-    SettingData set;
-
-    private void OnEnable()
-    {
-        string fileName = @"Settings" + ".Json";
-        string filePath = Application.dataPath + "/" + fileName;
-        if (File.Exists(filePath)) // 파일이 존재 하면
-        {
-            SettingJsonLead = File.ReadAllText(filePath);
-            set = JsonUtility.FromJson<SettingData>(SettingJsonLead);
-        }  
-    }
-
-    public enum DIFFCULTY
-    {
-        Easy, Hard
-    }
-    public DIFFCULTY diff = DIFFCULTY.Easy;
+    public SettingJson setjson;
+    public AudioClip[] EnemySound;
 
     public enum STATE
     {
@@ -68,6 +50,19 @@ public class Enemy : CharacterMovement, IBattle
         }
     }
 
+    public AudioSource _speaker = null;
+    public AudioSource EnemySpeeker
+    {
+        get
+        {
+            if (_speaker == null)
+            {
+                _speaker = GetComponent<AudioSource>();
+            }
+            return _speaker;
+        }
+    }
+
     void ChangeState(STATE s)
     {
         if (myState == s) return;
@@ -80,9 +75,6 @@ public class Enemy : CharacterMovement, IBattle
                 StopAllCoroutines();
                 myHpBar.gameObject.SetActive(false);
                 myAnim.SetBool("IsMoving", false);
-                Vector3 pos1 = SwipingPosition.position + SwipingPosition.up * -0.5f * transform.localScale.y;
-                Vector3 pos2 = SwipingPosition.position + SwipingPosition.up * 0.5f * transform.localScale.y;
-                Debug.DrawLine(pos1, pos2, Color.red);
                 break;
             case STATE.Battle:
                 StopAllCoroutines();
@@ -93,6 +85,8 @@ public class Enemy : CharacterMovement, IBattle
                 Destroy(myHpBar.gameObject);
                 StopAllCoroutines();
                 myAnim.SetTrigger("Death");
+                MyCharacter.Inst.playerInfo.playerStat.SoulS += 1000; // 죽으면 캐릭터 소울 증가
+                EnemySpeeker.PlayOneShot(EnemySound[5]);
                 GetComponent<Collider>().enabled = false;
                 GetComponent<Rigidbody>().useGravity = false;
                 break;
@@ -136,13 +130,9 @@ public class Enemy : CharacterMovement, IBattle
             {
                 myAnim.SetInteger("InputAttack", 2); // BreathAttack              
             }
-            else if (AttackNum == 3)
-            {
-                myAnim.SetInteger("InputAttack", 3); // RunAttack             
-            }
             else
             {
-                myAnim.SetInteger("InputAttack", 4); // JumpAttack
+                myAnim.SetInteger("InputAttack", 3); // JumpAttack
             }
         }
     }
@@ -155,13 +145,13 @@ public class Enemy : CharacterMovement, IBattle
     // Start is called before the first frame update
     void Start()
     {
-        if(set.diffculty == 0) // Easy 난이도 선택시
+        if(GameObject.Find("SettingJson").GetComponent<SettingJson>().set.diffculty == 0) // Easy 난이도 선택시
         {
             MyCharacter.Inst.LoadEnemyEasyData(); // EnemyEasy.Json 파일을 읽어옴
             myInfo = MyCharacter.Inst.enemyInfo.playerStat;
         }
-        else if(set.diffculty == 1) // Hard 난이도 선택시
-        {
+        else if(GameObject.Find("SettingJson").GetComponent<SettingJson>().set.diffculty == 1) // Hard 난이도 선택시
+        {   
             MyCharacter.Inst.LoadEnemyHardData(); // EnemyHard.Json 파일을 읽어옴
             myInfo = MyCharacter.Inst.enemyInfo.playerStat;
         }
@@ -181,5 +171,30 @@ public class Enemy : CharacterMovement, IBattle
     private void FixedUpdate()
     {
         myRigid.velocity = Vector3.zero;
+    }
+
+    public void OnPunchAttackSound()
+    {
+        EnemySpeeker.PlayOneShot(EnemySound[0]);
+    }
+
+    public void OnSwipingAttackSound()
+    {
+        EnemySpeeker.PlayOneShot(EnemySound[1]);
+    }
+
+    public void OnBreathAttackSound()
+    {
+        EnemySpeeker.PlayOneShot(EnemySound[2]);
+    }
+
+    public void OnJumpAttackStartSound()
+    {
+        EnemySpeeker.PlayOneShot(EnemySound[3]);
+    }
+
+    public void OnJumpAttackEndSound()
+    {
+        EnemySpeeker.PlayOneShot(EnemySound[4]);
     }
 }

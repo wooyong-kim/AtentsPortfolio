@@ -12,7 +12,7 @@ public class ItemSlot : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, 
     public Image itemImage; // 아이템 이미지
 
     public TextMeshProUGUI text_Count;
-    private ItemEffectDatabase theItemEffectDatabase;
+    public ItemEffectDatabase theItemEffectDatabase;
 
     void Start()
     {

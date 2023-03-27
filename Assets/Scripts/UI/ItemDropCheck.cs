@@ -1,8 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
-
 using TMPro;
-
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -52,7 +50,8 @@ public class ItemDropCheck : MonoBehaviour
     {
         DropCheck = true;
         ShowText.gameObject.SetActive(true);
-        ShowText.text = hitInfo.transform.GetComponent<ItemPickup>().item.itemName + " Get <color=yellow>" + " (E)" + "</color>";
+        ShowText.text = hitInfo.transform.parent.transform.GetComponent<ItemPickup>().item.itemName + " Get <color=yellow>" + " (E)" + "</color>";
+        
     }
 
     void ItemInfoDisAppear()
@@ -65,23 +64,13 @@ public class ItemDropCheck : MonoBehaviour
     {
         if(DropCheck)
         {
-            if(hitInfo.transform != null)
+            if(hitInfo.transform != null) // 오류 방지
             {
-                // StartCoroutine(CanPickupcountTime(2.0f, 5.0f));
-                Destroy(hitInfo.transform.gameObject);
-                theUI.AcquireItem(hitInfo.transform.GetComponent<ItemPickup>().item);
+                Destroy(hitInfo.transform.parent.transform.gameObject);
+                theUI.AcquireItem
+                    (hitInfo.transform.parent.transform.GetComponent<ItemPickup>().item);
                 ItemInfoDisAppear();
             }
         }
-    }
-
-    IEnumerator CanPickupcountTime(float delayTime1, float delayTime2)
-    {
-        yield return new WaitForSeconds(delayTime1);
-        ShowText.gameObject.SetActive(true);
-        ShowText.text = hitInfo.transform.GetComponent<ItemPickup>().item.itemName + "<color=blue>" + " Pick up." + "</color>";
-        yield return new WaitForSeconds(delayTime2);
-        Destroy(hitInfo.transform.gameObject);
-        ItemInfoDisAppear();
     }
 }

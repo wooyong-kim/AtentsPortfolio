@@ -22,7 +22,7 @@ public struct CharacterStat
     //필드 ( Field )
     [SerializeField] float maxHp;
     [SerializeField] float curHP;
-    //프로퍼티 ( Property )
+    
     public float MaxHp
     {
         get => maxHp;

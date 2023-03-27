@@ -4,21 +4,17 @@ using UnityEngine;
 
 public class AIPerception : MonoBehaviour
 {
+    public BGM BGM;
     public LayerMask myEnemy = default;
     public List<GameObject> myEnemylist = new List<GameObject>();
     public IBattle myTarget = null;
-    public event MyAction FindTarget = null;
-    public event MyAction LostTarget = null;
+    public event MyAction FindTarget = null; // delegate
+    public event MyAction LostTarget = null; // delegate
     // Start is called before the first frame update
     void Start()
     {
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
+        BGM.BGMSpeeker.clip = BGM.BGMSound[0]; // Start BGM
+        BGM.BGMSpeeker.Play();
     }
 
     public void OnLostTarget()
@@ -42,6 +38,8 @@ public class AIPerception : MonoBehaviour
                     {
                         myTarget = other.transform.GetComponent<IBattle>();
                         FindTarget?.Invoke();
+                        BGM.BGMSpeeker.clip = BGM.BGMSound[1];
+                        BGM.BGMSpeeker.Play();
                     }
                 }
             }
@@ -53,8 +51,9 @@ public class AIPerception : MonoBehaviour
         if (myTarget != null && other.transform == myTarget.transform)
         {
             OnLostTarget();
+            BGM.BGMSpeeker.clip = BGM.BGMSound[0];
+            BGM.BGMSpeeker.Play();         
         }
-
         myEnemylist.Remove(other.gameObject);
     }
 }
