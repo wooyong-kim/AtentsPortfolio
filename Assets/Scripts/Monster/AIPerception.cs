@@ -11,6 +11,7 @@ public class AIPerception : MonoBehaviour
     public event MyAction FindTarget = null; // delegate
     public event MyAction LostTarget = null; // delegate
     // Start is called before the first frame update
+    // 특정 범위에 플레이어 유무에 따라 몬스터의 상태를 변경
     void Start()
     {
         BGM.BGMSpeeker.clip = BGM.BGMSound[0]; // Start BGM

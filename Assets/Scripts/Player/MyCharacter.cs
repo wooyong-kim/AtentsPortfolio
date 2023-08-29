@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+// 플레이어, 몬스터 데이터 설정 
 public class MyCharacter : MonoBehaviour
 {
     static MyCharacter _inst = null;

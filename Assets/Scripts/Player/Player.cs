@@ -8,31 +8,25 @@ public class Player : CharacterProperty, IBattle
 {
     Vector3 desireDir = Vector2.zero;
     Vector3 curDir = Vector2.zero;
+    Vector3 moveDirection = Vector3.zero; // 이동 방향
 
-    public LayerMask EnemyMask = default;
+    public LayerMask enemyLayer;
+    public LayerMask groundLayer;
     public CharacterStat myInfo;
 
+    public Transform groundCheck;
     public Transform myHitPosition;
     public Slider myHpBar;
     public Slider myEgBar;
 
     public float moveSpeed = 10.0f;
-    bool IsComboable = false;
-    bool isMove = false;
+    bool IsComboable = false; // 콤보 공격
+    bool isMove = false; // 움직임
     bool hitMiss = false;
     bool shield = false;
     int ClickCount = 0;
-
-    float gravity = 2.5f; // 중력 변수
-    float yVelocity = 0; // 수직 속력 변수
-
-    public Transform myKnee;
-    public Transform myFoot;
-    RaycastHit slopHit;
-    public float maxSlopeAngle = 30.0f;
-
-    public Transform nextFrameRaycast;
-    public Transform groundCheck;
+    float x, z; // 캐릭터의 Horizontal Vertical 값
+    public float forceGravity = 50f; // 캐릭터 중력 값 
 
     public GameObject death;
     public AudioClip[] playerSound;
@@ -106,28 +100,14 @@ public class Player : CharacterProperty, IBattle
         myInfo = MyCharacter.Inst.playerInfo.playerStat;
     }
 
-    Vector3 AdjustDirectionToSlope(Vector3 direction)
-    {
-        return Vector3.ProjectOnPlane(direction, slopHit.normal).normalized;
-    }
-
-    float CalculateNextFrameGroundAngle(float moveSpeed) // 다음 프레임의 지면 각도
-    {
-        var nextFramePlayerPosition = nextFrameRaycast.position + desireDir * moveSpeed * Time.deltaTime;
-        if (Physics.Raycast(nextFramePlayerPosition, Vector3.down, out RaycastHit hitInfo, 2.0f, LayerMask.GetMask("Ground")))
-        {
-            return Vector3.Angle(Vector3.up, hitInfo.normal);
-        }
-        return 0.0f;
-    }
-
     // Update is called once per frame
     void Update()
     {
+        // UI가 비활성화일 때
         if (IsLive && !UI.inventoryActivatedInven && !UI.inventoryActivatedOption && !UI.levelActivate)
         {
             Move();
-            Gravity(); // 중력
+            Gravity();
             Attack();
             Shield();
             Sit();
@@ -151,103 +131,45 @@ public class Player : CharacterProperty, IBattle
 
     void Move()
     {
-        bool isOnSlope = IsOnSlope();
-        bool isGrounded = IsGrounded();
-        bool wallCrash = WallCrash();
-
-        desireDir.x = Input.GetAxisRaw("Horizontal");
-        desireDir.z = Input.GetAxisRaw("Vertical");
-
-        if (CalculateNextFrameGroundAngle(moveSpeed) < maxSlopeAngle)
+        if(!myAnim.GetBool("IsAttacking") && !myAnim.GetBool("IsRoll"))
         {
-            if (isOnSlope && isGrounded) // 경사면 위에 있으면
+            desireDir.x = Input.GetAxisRaw("Horizontal");
+            desireDir.z = Input.GetAxisRaw("Vertical");
+
+            curDir.x = Mathf.Lerp(curDir.x, desireDir.x, Time.deltaTime * moveSpeed);
+            curDir.z = Mathf.Lerp(curDir.z, desireDir.z, Time.deltaTime * moveSpeed);
+
+            // 이동 방향 계산
+            moveDirection = transform.forward * curDir.z + transform.right * curDir.x;
+            
+            myRigid.velocity = moveDirection * moveSpeed;
+
+            myAnim.SetFloat("x", curDir.x);
+            myAnim.SetFloat("z", curDir.z);
+
+            x = Mathf.Round(Mathf.Abs(curDir.x));
+            z = Mathf.Round(Mathf.Abs(curDir.z));
+
+            if (!Mathf.Approximately(x, 0.0f) || !Mathf.Approximately(z, 0.0f))
             {
-                if(!isMove)
-                {
-                    myRigid.constraints = RigidbodyConstraints.FreezeAll;
-                }
-                Vector3 dir = Quaternion.Euler(0, Camera.main.transform.rotation.eulerAngles.y, 0) * desireDir;
-                myRigid.velocity = AdjustDirectionToSlope(dir); // desireDir의 벡터 방향을 월드에서 카메라 기준으로 변경
-                //myRigid.velocity = AdjustDirectionToSlope(desireDir);
-                gravity = 0.0f;
-                myRigid.useGravity = false;                
+                myAnim.SetBool("IsMoving", true);
+                isMove = true;
             }
             else
             {
-                myRigid.constraints = RigidbodyConstraints.FreezeRotation;
-                gravity = 2.5f;
-                myRigid.useGravity = true;
+                myAnim.SetBool("IsMoving", false);
+                isMove = false;
             }
         }
+    }
 
-        curDir.x = Mathf.Lerp(curDir.x, desireDir.x, Time.deltaTime * moveSpeed);
-        curDir.z = Mathf.Lerp(curDir.z, desireDir.z, Time.deltaTime * moveSpeed);
-
-        if(wallCrash)
+    void Gravity()
+    {
+        // 캐릭터 바로 아래에 지면이 있는지 확인
+        if(!Physics.Raycast(groundCheck.position, Vector3.down, out RaycastHit hitInfo, 0.5f, groundLayer))
         {
-            AnimatorRootMotionMove();
-        }
-
-        myAnim.SetFloat("x", curDir.x);
-        myAnim.SetFloat("z", curDir.z);
-
-        float x = Mathf.Round(Mathf.Abs(curDir.x));
-        float z = Mathf.Round(Mathf.Abs(curDir.z));
-
-        if (!Mathf.Approximately(x, 0.0f) || !Mathf.Approximately(z, 0.0f))
-        {
-            myAnim.SetBool("IsMoving", true);
-            isMove = true;
-        }
-        else
-        {
-            myAnim.SetBool("IsMoving", false);
-            isMove = false;
-        }
-    }
-
-    bool PlayerWall(Vector3 dir)
-    {
-        return Physics.Raycast(transform.position, dir, 0.33f, LayerMask.GetMask("Wall"));
-    }
-
-    bool WallCrash()
-    {
-        if (PlayerWall(transform.right) || PlayerWall(transform.forward) || PlayerWall(-transform.right) || PlayerWall(-transform.forward))
-        {
-            return true;
-        }
-        return false;
-    }
-
-    bool IsOnSlope() // Player 바닥의 경사 확인
-    {
-        Ray ray = new Ray(transform.position + Vector3.up * 1.0f, Vector3.down);
-        if (Physics.Raycast(ray, out slopHit, 2.0f, LayerMask.GetMask("Ground")))
-        {
-            var anlge = Vector3.Angle(Vector3.up, slopHit.normal);
-            return anlge != 0.0f && anlge < maxSlopeAngle;
-        }
-        return false;
-    }
-
-    bool IsGrounded()
-    {
-        Vector3 boxSize = new Vector3(transform.lossyScale.x, 0.4f, transform.lossyScale.z);
-        return Physics.CheckBox(groundCheck.position, boxSize, Quaternion.identity, LayerMask.GetMask("Ground"));
-    }
-
-    void Gravity() // 중력
-    {
-        yVelocity += gravity * Time.deltaTime;
-
-        myRigid.AddForce(Vector3.down * yVelocity, ForceMode.VelocityChange);
-    }
-
-    void AnimatorRootMotionMove() // 벽에 충돌시 켜짐
-    {
-        transform.position = myAnim.rootPosition;
-        transform.rotation = myAnim.rootRotation;
+            // myRigid.velocity = myRigid.velocity.y * Vector3.down * moveSpeed;
+        }    
     }
 
     void Death()
@@ -308,6 +230,7 @@ public class Player : CharacterProperty, IBattle
                 if(!myAnim.GetBool("Sit"))
                 {
                     myAnim.SetBool("Sit", true);
+                    
                 }                   
                 else
                 {
@@ -329,6 +252,17 @@ public class Player : CharacterProperty, IBattle
                     StartCoroutine(MissTime(0.5f));
                     myInfo.curSpDelay = 0.0f;
                     myInfo.CurSP -= 20.0f;
+
+                    // 캐릭터가 이동 중이지 않으면
+                    if(Mathf.Approximately(x, 0.0f) && Mathf.Approximately(z, 0.0f))
+                    {
+                        myRigid.velocity = transform.forward * moveSpeed;
+                    }
+                    // 캐릭터가 이동 중이면
+                    else
+                    {
+                        myRigid.velocity = moveDirection * moveSpeed;
+                    }
                 }
             }
             myEgBar.value = myInfo.CurSP / myInfo.MaxSP;
@@ -337,7 +271,7 @@ public class Player : CharacterProperty, IBattle
 
     public void OnAttack()
     {
-        Collider[] list = Physics.OverlapSphere(myHitPosition.position, 1.0f * transform.localScale.x, EnemyMask);
+        Collider[] list = Physics.OverlapSphere(myHitPosition.position, 1.0f * transform.localScale.x, enemyLayer);
         foreach (Collider col in list)
         {
             IBattle ib = col.GetComponent<IBattle>();
@@ -376,6 +310,7 @@ public class Player : CharacterProperty, IBattle
         }     
     }
 
+    // misstime 값 만큼 공격을 회피
     IEnumerator MissTime(float misstime)
     {
         hitMiss = true;

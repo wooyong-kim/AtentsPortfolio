@@ -14,11 +14,6 @@ public class ItemDropCheck : MonoBehaviour
     [SerializeField]
     TextMeshProUGUI ShowText;
 
-    void Start()
-    {
-
-    }
-    // Update is called once per frame
     void Update()
     {
         CheckItem();

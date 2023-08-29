@@ -6,7 +6,7 @@
     "maxSP": 100.0,
     "curSP": 100.0,
     "attackDG": 30.0,
-    "moveSpeed": 2.0,
+    "moveSpeed": 10.0,
     "rotSpeed": 360.0,
     "attackDelay": 2.0,
     "curAttackDelay": 0.0,

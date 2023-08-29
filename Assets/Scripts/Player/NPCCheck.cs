@@ -14,13 +14,7 @@ public class NPCCheck : MonoBehaviour
     public UI theUI;
     [SerializeField]
     TextMeshProUGUI ShowText;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
+    // 플레이어의 특정 시야 안에 NPC가 존재하면 Text 출력
     // Update is called once per frame
     void Update()
     {

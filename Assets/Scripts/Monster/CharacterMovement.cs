@@ -6,6 +6,7 @@ using static UnityEditor.PlayerSettings;
 public delegate void MyAction();
 public delegate void MyAction<T>(T t);
 
+// 지정된 목표를 바라보아 일정 거리만큼 이동 뒤 랜덤함수로 결정된 패턴으로 공격
 public class CharacterMovement : MonoBehaviour
 {
     Rigidbody _rigid = null;

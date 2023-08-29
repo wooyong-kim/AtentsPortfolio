@@ -4637,7 +4637,7 @@ GameObject:
   - component: {fileID: 246801581}
   - component: {fileID: 246801580}
   - component: {fileID: 246801579}
-  m_Layer: 10
+  m_Layer: 11
   m_Name: Roof
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7063,37 +7063,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 373070824}
   m_CullTransparentMesh: 1
---- !u!1 &377141130
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 377141131}
-  m_Layer: 6
-  m_Name: NextFrameRaycast
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &377141131
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 377141130}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.9, z: 0.3}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 2019426107}
-  m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &379155578
 GameObject:
   m_ObjectHideFlags: 0
@@ -8828,7 +8797,7 @@ AudioSource:
   m_Volume: 1
   m_Pitch: 1
   Loop: 1
-  Mute: 0
+  Mute: 1
   Spatialize: 0
   SpatializePostEffects: 0
   Priority: 128
@@ -12543,6 +12512,51 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5813cb44a31a2a64c9007dfbb0424831, type: 3}
+--- !u!1 &693486373
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 693486374}
+  - component: {fileID: 693486375}
+  m_Layer: 6
+  m_Name: GroundCheck
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &693486374
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 693486373}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.025, z: 0}
+  m_LocalScale: {x: 0.05, y: 0.05, z: 0.05}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2019426107}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &693486375
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 693486373}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &728120354
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -13881,7 +13895,6 @@ MonoBehaviour:
   - {fileID: 8300000, guid: e857ec1de4e5e664482ee4d94e076f6d, type: 3}
   - {fileID: 8300000, guid: 54d918370fccea4458e787627be05e20, type: 3}
   - {fileID: 8300000, guid: 4c0382bbd0f3d3242b77d73814281ebd, type: 3}
-  diff: 0
   myState: 0
   mySenser: {fileID: 84698137}
   myFilter: {fileID: 43910423}
@@ -17438,37 +17451,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 951857620}
   m_CullTransparentMesh: 1
---- !u!1 &953980929
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 953980930}
-  m_Layer: 6
-  m_Name: GroundCheck
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &953980930
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 953980929}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 2019426107}
-  m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &954119023
 GameObject:
   m_ObjectHideFlags: 0
@@ -22011,8 +21993,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 83e440486ef22564984f529e0a2fcb3a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  myTaget: {fileID: 2019426107}
-  myRoot: {fileID: 772148362}
 --- !u!1001 &1220349188
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -23550,7 +23530,7 @@ Light:
   serializedVersion: 10
   m_Type: 1
   m_Shape: 0
-  m_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Intensity: 1
   m_Range: 10
   m_SpotAngle: 30
@@ -26753,7 +26733,7 @@ Transform:
   - {fileID: 298526098}
   - {fileID: 739812898}
   m_Father: {fileID: 0}
-  m_RootOrder: 10
+  m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1550925029
 GameObject:
@@ -66185,8 +66165,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f349330406a99a4b830e505d7ce280b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Enemy: {fileID: 772148360}
-  myText: {fileID: 1950964316}
 --- !u!222 &1950964318
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -67928,8 +67906,7 @@ Transform:
   m_Children:
   - {fileID: 543450652777061212}
   - {fileID: 1819942895}
-  - {fileID: 377141131}
-  - {fileID: 953980930}
+  - {fileID: 693486374}
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -67945,9 +67922,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f95f39e76282b664fbb5288fe89240df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  EnemyMask:
+  enemyLayer:
     serializedVersion: 2
     m_Bits: 128
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 1024
   myInfo:
     Lv: 1
     Souls: 0
@@ -67967,15 +67947,12 @@ MonoBehaviour:
     endurance: 1
     vitality: 1
     strength: 1
+  groundCheck: {fileID: 693486374}
   myHitPosition: {fileID: 894272511}
   myHpBar: {fileID: 22697272}
   myEgBar: {fileID: 292202497}
   moveSpeed: 10
-  myKnee: {fileID: 5477181764870894189}
-  myFoot: {fileID: 608321762398362315}
-  maxSlopeAngle: 40
-  nextFrameRaycast: {fileID: 377141131}
-  groundCheck: {fileID: 953980930}
+  forceGravity: 0
   death: {fileID: 253880823}
   playerSound:
   - {fileID: 8300000, guid: c044e6b89d8fb5943a2a19038ec2eeef, type: 3}
@@ -67989,7 +67966,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2019426106}
   serializedVersion: 2
-  m_Mass: 10
+  m_Mass: 100
   m_Drag: 0
   m_AngularDrag: 0.05
   m_UseGravity: 1
@@ -70385,7 +70362,6 @@ GameObject:
   m_Component:
   - component: {fileID: 543450652777061212}
   - component: {fileID: 5866666020953309478}
-  - component: {fileID: 5866666020953309479}
   - component: {fileID: 1989226584}
   m_Layer: 6
   m_Name: Paladin WProp J Nordstrom
@@ -70599,7 +70575,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1100577163833811855, guid: 43df60e518a768748b1872ea4e1122a8, type: 3}
       propertyPath: m_RootOrder
-      value: 11
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 1100577163833811855, guid: 43df60e518a768748b1872ea4e1122a8, type: 3}
       propertyPath: m_LocalPosition.x
@@ -89727,25 +89703,13 @@ Animator:
   m_Controller: {fileID: 9100000, guid: 6403e9d8e85a67e4282473ebc1fdfe8d, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
-  m_ApplyRootMotion: 1
+  m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &5866666020953309479
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 919132149037875686}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b2e8281d347f21a46b102d50ed6fa6af, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!95 &5866666021161057828
 Animator:
   serializedVersion: 4

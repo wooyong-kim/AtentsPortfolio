@@ -22,7 +22,8 @@ public class SpringArm : MonoBehaviour
     float curCamDist = 0.0f;
     float desirDist = 0.0f; // 희망 거리
     float OffsetDist = 0.5f;
-    // Start is called before the first frame update
+
+    // 플레이어 카메라 회전 설정
     void Start()
     {
         desireRot.x = curRot.x = transform.localRotation.eulerAngles.x;
@@ -32,7 +33,8 @@ public class SpringArm : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(!UI.inventoryActivatedInven && !UI.inventoryActivatedOption && !UI.levelActivate)
+        // UI가 비활성화일 때
+        if (!UI.inventoryActivatedInven && !UI.inventoryActivatedOption && !UI.levelActivate)
         {
             desireRot.x += -Input.GetAxisRaw("Mouse Y") * rotSpeed;
             desireRot.x = Mathf.Clamp(desireRot.x, RotateRange.x, RotateRange.y);
